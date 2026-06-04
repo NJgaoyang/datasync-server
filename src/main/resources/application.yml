@@ -1,0 +1,41 @@
+server:
+  port: 9000
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/datasync?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&autoReconnect=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-timeout: 10000
+      validation-timeout: 5000
+      idle-timeout: 300000
+      max-lifetime: 600000
+      connection-test-query: SELECT 1
+      leak-detection-threshold: 60000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: false
+
+# 内置调度器配置
+scheduler:
+  thread-pool-size: 5
+
+# SeaTunnel 安装目录（未设置环境变量 SEATUNNEL_HOME 时使用此配置）
+seatunnel:
+  home: /data/software/apache-seatunnel-2.3.13
+
+# AES 加密密钥（用于加密 SeaTunnel 配置中的密码）
+datasync:
+  secret-key: DataSync@2026!Key
+
+logging:
+  level:
+    com.datasync: info
+
