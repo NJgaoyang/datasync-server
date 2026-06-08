@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/datasync?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&autoReconnect=true
     username: root
-    password: 123456
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connection-timeout: 10000
@@ -38,4 +38,34 @@ datasync:
 logging:
   level:
     com.datasync: info
+
+# ==================== 告警模块配置说明 ====================
+# 告警配置通过 REST API 管理（/api/alert/*），存储在数据库 alert_config 表中。
+#
+# API 接口:
+#   GET    /api/alert/list       - 查询所有告警配置
+#   POST   /api/alert/save       - 新增告警配置
+#   PUT    /api/alert/update     - 更新告警配置
+#   DELETE /api/alert/{id}       - 删除告警配置
+#   POST   /api/alert/toggle/{id} - 启用/禁用切换
+#   POST   /api/alert/test/{id}  - 测试告警推送
+#
+# 新建配置示例 JSON:
+# {
+#   "name": "钉钉告警",
+#   "type": "DINGTALK",
+#   "webhookUrl": "https://oapi.dingtalk.com/robot/send?access_token=xxx",
+#   "secret": "SECxxx",                        ← 可选, 用于加签校验
+#   "keyword": "告警",                         ← 可选, 用于钉钉关键词安全校验
+#   "enabled": true,
+#   "eventTypes": "FAILURE",
+#   "template": "### 告警\n- 任务:{taskName}\n- 状态:{status}\n- 原因:{message}"
+# }
+#
+# 支持的事件类型(eventTypes): FAILURE / SUCCESS / ALL (逗号分隔)
+#
+# 模板占位符:
+#   {taskId} {taskName} {status} {message} {duration} {rows} {qps} {time}
+#   - 模板留空则使用系统默认模板
+#   - 钉钉默认使用 markdown 格式, 飞书默认使用富文本卡片
 

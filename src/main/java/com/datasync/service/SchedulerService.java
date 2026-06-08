@@ -34,6 +34,9 @@ public class SchedulerService {
     @Autowired
     private ClusterClientRepository clusterClientRepository;
 
+    @Autowired(required = false)
+    private AlertService alertService;
+
     @Value("${scheduler.thread-pool-size:5}")
     private int threadPoolSize;
 
@@ -163,6 +166,9 @@ public class SchedulerService {
                 task.setLastExecTime(LocalDateTime.now());
                 task.setStatus("GENERATED");
                 taskRepository.save(task);
+
+                // 发送成功告警
+                sendAlertIfNeeded(task, "SUCCESS", "任务执行成功");
             } catch (Exception e) {
                 logBuf.append("\n[ERROR] ").append(e.getMessage()).append("\n");
                 execution.setStatus("FAILED");
@@ -179,6 +185,9 @@ public class SchedulerService {
                 task.setLastExecTime(LocalDateTime.now());
                 task.setStatus("GENERATED");
                 taskRepository.save(task);
+
+                // 发送失败告警
+                sendAlertIfNeeded(task, "FAILED", e.getMessage() != null ? e.getMessage() : "未知错误");
             } finally {
                 runningTasks.remove(task.getId());
                 runningLogs.remove(task.getId());
@@ -682,5 +691,25 @@ public class SchedulerService {
      */
     public boolean isTaskRunning(Long taskId) {
         return runningTasks.containsKey(taskId) && !runningTasks.get(taskId).isDone();
+    }
+
+    /**
+     * 任务执行完成后发送告警通知
+     */
+    private void sendAlertIfNeeded(SyncTask task, String status, String message) {
+        if (alertService == null) return;
+        try {
+            alertService.sendTaskAlert(
+                    task.getId(),
+                    task.getTaskName(),
+                    status,
+                    message,
+                    task.getLastExecDuration(),
+                    task.getLastExecRows(),
+                    task.getLastExecQps()
+            );
+        } catch (Exception e) {
+            System.err.println("[SchedulerService] 告警发送失败: " + e.getMessage());
+        }
     }
 }
