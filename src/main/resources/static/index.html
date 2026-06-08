@@ -947,6 +947,9 @@
                 <div class="menu-item" v-if="loginUserRole==='ADMIN'" :class="{active: currentPage==='sys-perm'}" @click="currentPage='sys-perm'" title="权限管理">
                     <i class="fas fa-shield-alt"></i> <span>权限管理</span>
                 </div>
+                <div class="menu-item" v-if="loginUserRole==='ADMIN'" :class="{active: currentPage==='sys-alert'}" @click="currentPage='sys-alert'" title="告警配置">
+                    <i class="fas fa-bell"></i> <span>告警配置</span>
+                </div>
                 <div class="menu-item" :class="{active: currentPage==='sys-log'}" @click="currentPage='sys-log'" title="操作记录">
                     <i class="fas fa-history"></i> <span>操作记录</span>
                 </div>
@@ -1987,6 +1990,101 @@
                         <div>状态：<span :style="{color:clusterDetail.status==='ONLINE'?'var(--success)':'var(--text-muted)'}">{{ clusterDetail.status==='ONLINE'?'在线':'离线' }}</span></div>
                         <div>描述：{{ clusterDetail.description || '-' }}</div>
                     </div>
+                </el-dialog>
+            </template>
+            <!-- ═══════════ 告警配置 ═══════════ -->
+            <template v-if="currentPage==='sys-alert'">
+                <div class="page-header"><h2>告警配置</h2><p>管理钉钉/飞书 Webhook 告警通知</p></div>
+                <div class="page-body">
+                    <div style="margin-bottom:16px;display:flex;gap:8px;align-items:center">
+                        <el-button type="primary" size="default" @click="openAlertDialog(null)"><i class="fas fa-plus" style="margin-right:6px"></i>新增配置</el-button>
+                    </div>
+                    <div class="card" v-if="alertList.length" style="padding:0;overflow:hidden">
+                        <table class="task-table">
+                            <thead><tr><th>名称</th><th>渠道</th><th>Webhook</th><th>触发事件</th><th>启用</th><th>操作</th></tr></thead>
+                            <tbody><tr v-for="a in alertList" :key="a.id">
+                                <td class="task-name">{{ a.name }}</td>
+                                <td>
+                                    <span class="status-tag" :style="{background:a.type==='DINGTALK'?'#0089ff':a.type==='FEISHU'?'#3370ff':'var(--text-muted)',color:'#fff'}">
+                                        {{ a.type==='DINGTALK' ? '钉钉' : a.type==='FEISHU' ? '飞书' : a.type }}
+                                    </span>
+                                </td>
+                                <td style="font-size:12px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-muted)">{{ a.webhookUrl }}</td>
+                                <td>
+                                    <span v-if="a.eventTypes==='FAILURE'" class="status-tag" style="background:var(--danger);color:#fff">失败</span>
+                                    <span v-else-if="a.eventTypes==='SUCCESS'" class="status-tag" style="background:var(--success);color:#fff">成功</span>
+                                    <span v-else class="status-tag" style="background:var(--info);color:#fff">全部</span>
+                                </td>
+                                <td>
+                                    <el-switch v-model="a.enabled" @change="toggleAlert(a)" size="small"></el-switch>
+                                </td>
+                                <td>
+                                    <el-button size="mini" @click="testAlert(a)">测试</el-button>
+                                    <el-button size="mini" @click="openAlertDialog(a)">编辑</el-button>
+                                    <el-button size="mini" type="danger" plain @click="deleteAlert(a)">删除</el-button>
+                                </td>
+                            </tr></tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state" v-else>
+                        <div class="empty-icon"><i class="fas fa-bell"></i></div>
+                        <p>暂无告警配置</p>
+                        <p class="empty-sub">点击上方新增配置开始添加钉钉或飞书告警</p>
+                    </div>
+                </div>
+
+                <!-- 新增/编辑告警配置弹窗 -->
+                <el-dialog v-model="alertDialogVisible" :title="alertForm.id?'编辑告警配置':'新增告警配置'" width="560px" :close-on-click-modal="false">
+                    <div style="display:flex;flex-direction:column;gap:14px">
+                        <div>
+                            <label style="display:block;font-size:14px;color:var(--text-secondary);margin-bottom:4px">配置名称</label>
+                            <el-input v-model="alertForm.name" placeholder="例如：生产环境钉钉告警"></el-input>
+                        </div>
+                        <div style="display:flex;gap:12px">
+                            <div style="flex:1">
+                                <label style="display:block;font-size:14px;color:var(--text-secondary);margin-bottom:4px">渠道类型</label>
+                                <el-select v-model="alertForm.type" style="width:100%">
+                                    <el-option label="钉钉 (DingTalk)" value="DINGTALK"></el-option>
+                                    <el-option label="飞书 (Feishu)" value="FEISHU"></el-option>
+                                </el-select>
+                            </div>
+                            <div style="flex:1">
+                                <label style="display:block;font-size:14px;color:var(--text-secondary);margin-bottom:4px">触发事件</label>
+                                <el-select v-model="alertForm.eventTypes" style="width:100%">
+                                    <el-option label="仅失败" value="FAILURE"></el-option>
+                                    <el-option label="仅成功" value="SUCCESS"></el-option>
+                                    <el-option label="全部" value="ALL"></el-option>
+                                </el-select>
+                            </div>
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:14px;color:var(--text-secondary);margin-bottom:4px">Webhook 地址</label>
+                            <el-input v-model="alertForm.webhookUrl" placeholder="https://oapi.dingtalk.com/robot/send?access_token=xxx"></el-input>
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:14px;color:var(--text-secondary);margin-bottom:4px">签名密钥 <span style="font-size:11px;color:var(--text-muted)">(可选，用于加签安全校验)</span></label>
+                            <el-input v-model="alertForm.secret" placeholder="SECxxx..."></el-input>
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:14px;color:var(--text-secondary);margin-bottom:4px">钉钉关键词 <span style="font-size:11px;color:var(--text-muted)">(可选，用于钉钉机器人关键词安全校验)</span></label>
+                            <el-input v-model="alertForm.keyword" placeholder="告警"></el-input>
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:14px;color:var(--text-secondary);margin-bottom:4px">
+                                自定义模板 <span style="font-size:11px;color:var(--text-muted)">(留空使用默认模板)</span>
+                            </label>
+                            <el-input v-model="alertForm.template" type="textarea" :rows="5"
+                                placeholder="支持占位符: {taskName} {status} {message} {duration} {rows} {qps} {time}"></el-input>
+                            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;line-height:1.6">
+                                可用占位符：<code>{taskName}</code> <code>{status}</code> <code>{message}</code> <code>{duration}</code> <code>{rows}</code> <code>{qps}</code> <code>{time}</code>
+                                <br>钉钉支持 markdown 格式，飞书支持纯文本格式
+                            </div>
+                        </div>
+                    </div>
+                    <template #footer>
+                        <el-button @click="alertDialogVisible=false">取消</el-button>
+                        <el-button type="primary" @click="saveAlert">保存</el-button>
+                    </template>
                 </el-dialog>
             </template>
         </main>
@@ -3271,6 +3369,7 @@
                 if (newPage === 'sys-perm') loadUserList();
                 if (newPage === 'sys-log') loadOpLogPage(1);
                 if (newPage === 'sys-cluster') { loadClusterList().then(() => { setTimeout(checkAllHealth, 500); }); }
+                if (newPage === 'sys-alert') loadAlertList();
                 if (newPage === 'create-task') loadClusterListSilent();
             });
 
@@ -3439,6 +3538,48 @@
                 } catch(e) { console.error(e); }
             }
 
+            // ===== 告警配置 =====
+            const alertList = ref([]);
+            const alertDialogVisible = ref(false);
+            const alertForm = ref({ id: null, name: '', type: 'DINGTALK', webhookUrl: '', secret: '', keyword: '', template: '', enabled: true, eventTypes: 'FAILURE' });
+
+            async function loadAlertList() {
+                try { const r = await api.get('/alert/list'); alertList.value = r.data; } catch(e) { console.error(e); }
+            }
+            function openAlertDialog(a) {
+                if (a) { alertForm.value = { ...a }; }
+                else { alertForm.value = { id: null, name: '', type: 'DINGTALK', webhookUrl: '', secret: '', keyword: '', template: '', enabled: true, eventTypes: 'FAILURE' }; }
+                alertDialogVisible.value = true;
+            }
+            async function saveAlert() {
+                if (!alertForm.value.name || !alertForm.value.webhookUrl) { ElMessage.warning('请填写名称和Webhook地址'); return; }
+                try {
+                    if (alertForm.value.id) await api.put('/alert/update', alertForm.value);
+                    else await api.post('/alert/save', alertForm.value);
+                    ElMessage.success('保存成功'); alertDialogVisible.value = false; await loadAlertList();
+                } catch(e) { ElMessage.error(e.response?.data?.message || '保存失败'); }
+            }
+            async function toggleAlert(a) {
+                try { await api.post('/alert/toggle/' + a.id); } catch(e) { a.enabled = !a.enabled; ElMessage.error('操作失败'); }
+            }
+            async function deleteAlert(a) {
+                try {
+                    await ElMessageBox.confirm('确认删除告警配置「' + a.name + '」？', '删除确认', { type: 'warning' });
+                    await api.delete('/alert/' + a.id);
+                    ElMessage.success('已删除'); await loadAlertList();
+                } catch(e) { if (e !== 'cancel') console.error(e); }
+            }
+            async function testAlert(a) {
+                try {
+                    const r = await api.post('/alert/test/' + a.id);
+                    if (r.data && r.data.success === false) {
+                        ElMessage.error('发送失败: ' + (r.data.message || '未知错误'));
+                    } else {
+                        ElMessage.success('测试消息已发送，请检查 ' + (a.type==='DINGTALK'?'钉钉':'飞书') + ' 群聊');
+                    }
+                } catch(e) { ElMessage.error(e.response?.data?.message || e.response?.data?.error || '测试发送失败'); }
+            }
+
             onMounted(() => {
                 const loader = document.getElementById('page-loader');
                 if (loader) loader.style.display = 'none';
@@ -3481,7 +3622,8 @@
                 permUserId, permDsId, permCanSql, permList, permDsMap, loadUserPermissions, grantPermission, revokePermission,
                 opLogKeyword, opLogDateRange, opLogList, opLogTotal, opLogPage, opLogPageSize, opLogTotalPages, loadOpLogPage,
                 clusterList, clusterDialogVisible, clusterForm, clusterDetailVisible, clusterDetail,
-                checkingAllHealth, loadClusterList, openClusterDialog, saveCluster, viewClusterDetail, checkClusterHealth, checkAllHealth, deleteCluster, getClusterName
+                checkingAllHealth, loadClusterList, openClusterDialog, saveCluster, viewClusterDetail, checkClusterHealth, checkAllHealth, deleteCluster, getClusterName,
+                alertList, alertDialogVisible, alertForm, loadAlertList, openAlertDialog, saveAlert, toggleAlert, deleteAlert, testAlert
             };
         }
     });
