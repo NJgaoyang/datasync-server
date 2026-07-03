@@ -9,3 +9,4 @@ public class DataSyncApplication {
         SpringApplication.run(DataSyncApplication.class, args);
     }
 }
+

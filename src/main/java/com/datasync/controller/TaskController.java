@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.datasync.repository.TaskExecutionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 
 @RestController
@@ -36,13 +35,23 @@ public class TaskController {
     }
 
     @GetMapping("/list")
-    public List<SyncTask> list() {
-        return taskService.listTasks();
+    public List<Map<String, Object>> list() {
+        return taskService.listTaskSummaries();
+    }
+
+    @GetMapping("/stats/dashboard")
+    public Map<String, Object> getDashboardStats() {
+        return taskService.getDashboardStats();
     }
 
     @GetMapping("/search")
     public List<SyncTask> search(@RequestParam(required = false) String keyword) {
         return taskService.searchTasks(keyword);
+    }
+
+    @GetMapping("/tables/synced")
+    public List<Map<String, Object>> listSyncedTables() {
+        return taskService.listSyncedTables();
     }
 
     @GetMapping("/{id}")

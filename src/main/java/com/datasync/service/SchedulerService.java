@@ -2,13 +2,16 @@ package com.datasync.service;
 
 import com.datasync.entity.ClusterClient;
 import com.datasync.entity.SyncTask;
+import com.datasync.entity.SyncTaskTable;
 import com.datasync.entity.TaskExecution;
 import com.datasync.repository.ClusterClientRepository;
 import com.datasync.repository.SyncTaskRepository;
+import com.datasync.repository.SyncTaskTableRepository;
 import com.datasync.repository.TaskExecutionRepository;
 import com.datasync.util.AesUtil;
 import com.jcraft.jsch.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +37,12 @@ public class SchedulerService {
     @Autowired
     private ClusterClientRepository clusterClientRepository;
 
+    @Autowired
+    private SyncTaskTableRepository taskTableRepository;
+
+    @Autowired
+    private ObjectProvider<SyncTaskService> syncTaskServiceProvider;
+
     @Autowired(required = false)
     private AlertService alertService;
 
@@ -46,9 +55,15 @@ public class SchedulerService {
     @Value("${seatunnel.home:/data/software/apache-seatunnel-2.3.13}")
     private String seatunnelHomeConfig;
 
+    @Value("${seatunnel.batch-table-size:5}")
+    private int batchTableSize;
+
     private ScheduledExecutorService scheduler;
     private final ConcurrentHashMap<Long, Future<?>> runningTasks = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Long, StringBuffer> runningLogs = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Long, Process> runningProcesses = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Long, ChannelExec> runningSshExecs = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Long, Session> runningSshSessions = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Long, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
 
     @PostConstruct
@@ -154,7 +169,7 @@ public class SchedulerService {
         // 提交到线程池执行
         Future<?> future = scheduler.submit(() -> {
             try {
-                runSeaTunnelJob(task, execId, logBuf);
+                runSeaTunnelJobs(task, execId, logBuf);
 
                 execution.setStatus("SUCCESS");
                 execution.setFinishedAt(LocalDateTime.now());
@@ -191,16 +206,62 @@ public class SchedulerService {
             } finally {
                 runningTasks.remove(task.getId());
                 runningLogs.remove(task.getId());
+                runningProcesses.remove(task.getId());
+                runningSshExecs.remove(task.getId());
+                runningSshSessions.remove(task.getId());
             }
         });
         runningTasks.put(task.getId(), future);
     }
 
+    private void runSeaTunnelJobs(SyncTask task, Long execId, StringBuffer logBuf) throws Exception {
+        List<SyncTaskTable> tables = taskTableRepository.findByTaskIdOrderByIdAsc(task.getId());
+        SyncTaskService syncTaskService = syncTaskServiceProvider.getObject();
+        if (tables.isEmpty() || !"batch".equals(task.getSyncType())) {
+            appendAndSaveLog(execId, logBuf, "准备本次同步配置和目标表结构");
+            String config = tables.isEmpty()
+                    ? task.getSeatunnelConfig()
+                    : syncTaskService.buildSeaTunnelConfigForTables(task, tables);
+            runSeaTunnelJob(task, execId, logBuf, config, null);
+            return;
+        }
+
+        int batchSize = Math.max(1, batchTableSize);
+        if (tables.size() <= 1) {
+            appendAndSaveLog(execId, logBuf, "准备本次同步配置和目标表结构");
+            String config = syncTaskService.buildSeaTunnelConfigForTables(task, tables);
+            runSeaTunnelJob(task, execId, logBuf, config, null);
+            return;
+        }
+
+        int totalBatches = (tables.size() + batchSize - 1) / batchSize;
+        appendAndSaveLog(execId, logBuf, "离线多表分批执行：共 " + tables.size()
+                + " 张表，批大小 " + batchSize + "，共 " + totalBatches + " 批");
+        for (int i = 0; i < totalBatches; i++) {
+            int from = i * batchSize;
+            int to = Math.min(from + batchSize, tables.size());
+            List<SyncTaskTable> batchTables = new ArrayList<>(tables.subList(from, to));
+            int batchNo = i + 1;
+            String tableNames = batchTables.stream()
+                    .map(this::formatTablePair)
+                    .collect(Collectors.joining(", "));
+            appendAndSaveLog(execId, logBuf, "第 " + batchNo + "/" + totalBatches + " 批开始：" + tableNames);
+            try {
+                String batchConfig = syncTaskService.buildSeaTunnelConfigForTables(task, batchTables);
+                runSeaTunnelJob(task, execId, logBuf, batchConfig, "batch_" + batchNo);
+                appendAndSaveLog(execId, logBuf, "第 " + batchNo + "/" + totalBatches + " 批成功");
+            } catch (Exception e) {
+                String message = e.getMessage() != null ? e.getMessage() : e.toString();
+                appendAndSaveLog(execId, logBuf, "第 " + batchNo + "/" + totalBatches + " 批失败：" + message);
+                throw e;
+            }
+        }
+    }
+
     /**
      * 实际运行 SeaTunnel 任务
      */
-    private void runSeaTunnelJob(SyncTask task, Long execId, StringBuffer logBuf) throws Exception {
-        String config = task.getSeatunnelConfig();
+    private void runSeaTunnelJob(SyncTask task, Long execId, StringBuffer logBuf, String config, String fileSuffix) throws Exception {
         if (config == null || config.isEmpty()) {
             throw new RuntimeException("SeaTunnel 配置为空，无法执行");
         }
@@ -214,13 +275,14 @@ public class SchedulerService {
         if (isCluster && task.getClusterId() != null) {
             ClusterClient cluster = clusterClientRepository.findById(task.getClusterId()).orElse(null);
             if (cluster != null && cluster.getSshUser() != null && !cluster.getSshUser().isEmpty()) {
-                runViaSsh(task, config, cluster, execId, logBuf);
+                runViaSsh(task, config, cluster, execId, logBuf, fileSuffix);
                 return;
             }
         }
 
         // 本地执行模式（客户端模式，或集群模式但无SSH配置时回退）
-        String configFile = System.getProperty("java.io.tmpdir") + "/seatunnel_job_" + task.getId() + ".conf";
+        String configFile = System.getProperty("java.io.tmpdir") + "/seatunnel_job_" + task.getId()
+                + "_" + execId + (fileSuffix == null ? "" : "_" + fileSuffix) + ".conf";
         try (FileWriter fw = new FileWriter(configFile)) {
             fw.write(config);
         }
@@ -245,14 +307,15 @@ public class SchedulerService {
         String mode = isCluster ? "[集群模式-本地]" : "[客户端模式]";
         logBuf.append("[").append(LocalDateTime.now()).append("] ").append(mode).append(" 启动命令: ").append(String.join(" ", command)).append("\n");
 
-        execLocal(command, seatunnelHome, execId, logBuf);
+        execLocal(task.getId(), command, seatunnelHome, execId, logBuf);
     }
 
     /**
      * 通过 SSH 远程执行 SeaTunnel
      */
-    private void runViaSsh(SyncTask task, String config, ClusterClient cluster, Long execId, StringBuffer logBuf) throws Exception {
-        String remoteConfigPath = "/tmp/seatunnel_job_" + task.getId() + ".conf";
+    private void runViaSsh(SyncTask task, String config, ClusterClient cluster, Long execId, StringBuffer logBuf, String fileSuffix) throws Exception {
+        String remoteConfigPath = "/tmp/seatunnel_job_" + task.getId()
+                + "_" + execId + (fileSuffix == null ? "" : "_" + fileSuffix) + ".conf";
         String stHome = cluster.getSeatunnelHome();
         if (stHome == null || stHome.isEmpty()) {
             stHome = seatunnelHomeConfig;
@@ -301,6 +364,8 @@ public class SchedulerService {
             exec.setOutputStream(capturedOut);
             exec.setErrStream(capturedOut);
             exec.connect();
+            runningSshExecs.put(task.getId(), exec);
+            runningSshSessions.put(task.getId(), session);
 
             // 等待命令执行完成，同时定期存DB（长任务也能看到中间日志）
             long lastSave2 = System.currentTimeMillis();
@@ -330,6 +395,8 @@ public class SchedulerService {
                 throw new RuntimeException("SeaTunnel 集群任务执行失败，退出码: " + exitCode);
             }
         } finally {
+            runningSshExecs.remove(task.getId());
+            runningSshSessions.remove(task.getId());
             session.disconnect();
         }
     }
@@ -337,7 +404,7 @@ public class SchedulerService {
     /**
      * 本地执行 shell 命令
      */
-    private void execLocal(List<String> command, String workDir, Long execId, StringBuffer logBuf) throws Exception {
+    private void execLocal(Long taskId, List<String> command, String workDir, Long execId, StringBuffer logBuf) throws Exception {
         ProcessBuilder pb = new ProcessBuilder(command);
         pb.directory(new java.io.File(workDir));
         pb.redirectErrorStream(true);
@@ -346,6 +413,7 @@ public class SchedulerService {
         env.put("SEATUNNEL_HOME", workDir);
 
         Process process = pb.start();
+        runningProcesses.put(taskId, process);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -427,6 +495,24 @@ public class SchedulerService {
      * 根据 cron 表达式计算距离下一次执行还需多少毫秒
      * 支持5字段(分 时 日 月 周)或6字段(秒 分 时 日 月 周)
      */
+    private void appendAndSaveLog(Long execId, StringBuffer logBuf, String message) {
+        logBuf.append("[").append(LocalDateTime.now()).append("] ").append(message).append("\n");
+        TaskExecution exec = executionRepository.findById(execId).orElse(null);
+        if (exec != null) {
+            exec.setLogText(logBuf.toString());
+            executionRepository.save(exec);
+        }
+    }
+
+    private String formatTablePair(SyncTaskTable table) {
+        String source = table.getSourceDatabase() + "." + table.getSourceTable();
+        String target = table.getTargetDatabase() + "." + table.getTargetTable();
+        if (source.equals(target)) {
+            return source;
+        }
+        return source + " -> " + target;
+    }
+
     private long computeNextDelay(String cronExpr) {
         try {
             String[] parts = cronExpr.trim().split("\\s+");
@@ -562,6 +648,7 @@ public class SchedulerService {
      */
     public boolean stopTask(Long taskId) {
         Future<?> future = runningTasks.get(taskId);
+        boolean killed = killRunningExecution(taskId);
         if (future != null && !future.isDone()) {
             boolean cancelled = future.cancel(true);
             runningTasks.remove(taskId);
@@ -589,9 +676,45 @@ public class SchedulerService {
                 }
             }
             runningLogs.remove(taskId);
-            return cancelled;
+            return cancelled || killed;
         }
-        return false;
+        return killed;
+    }
+
+    private boolean killRunningExecution(Long taskId) {
+        boolean killed = false;
+
+        Process process = runningProcesses.remove(taskId);
+        if (process != null && process.isAlive()) {
+            process.destroy();
+            try {
+                if (!process.waitFor(3, TimeUnit.SECONDS)) {
+                    process.destroyForcibly();
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                process.destroyForcibly();
+            }
+            killed = true;
+        }
+
+        ChannelExec sshExec = runningSshExecs.remove(taskId);
+        if (sshExec != null && !sshExec.isClosed()) {
+            sshExec.disconnect();
+            killed = true;
+        }
+
+        Session sshSession = runningSshSessions.remove(taskId);
+        if (sshSession != null && sshSession.isConnected()) {
+            sshSession.disconnect();
+            killed = true;
+        }
+
+        StringBuffer logBuf = runningLogs.get(taskId);
+        if (killed && logBuf != null) {
+            logBuf.append("\n[WARN] 已终止任务对应的 SeaTunnel 执行进程\n");
+        }
+        return killed;
     }
 
     /**

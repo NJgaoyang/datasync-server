@@ -5,13 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9af31f2a-414c-40b2-adbf-6c6151bfa09a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/UPGRADE.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/datasync/controller/AlertController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/datasync/entity/AlertConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/datasync/repository/AlertConfigRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/datasync/service/AlertService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/datasync/DataSyncApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/datasync/DataSyncApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/datasync/controller/TaskController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/datasync/controller/TaskController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/datasync/entity/SyncTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/datasync/entity/SyncTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/datasync/repository/SyncTaskRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/datasync/repository/SyncTaskRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/datasync/repository/SyncTaskTableRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/datasync/repository/SyncTaskTableRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/datasync/service/SchedulerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/datasync/service/SchedulerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/datasync/service/SyncTaskService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/datasync/service/SyncTaskService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/schema.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,37 +25,54 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8,
-  "fromUser": false
-}]]></component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="customMavenHome" value="D:\software\apache-maven-3.9.11" />
+        <option name="mavenHomeTypeForPersistence" value="CUSTOM" />
+        <option name="userSettingsFile" value="D:\software\apache-maven-3.9.11\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8,
+  &quot;fromUser&quot;: false
+}</component>
   <component name="ProjectId" id="3Epg9vlX7c81skAdnSHM9hmKr6p" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.datasync-server [clean].executor": "Run",
-    "Maven.datasync-server [package].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "Spring Boot.DataSyncApplication.executor": "Run",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "dev20260608",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/ldeaProjects44/datasync-server",
-    "settings.editor.selected.configurable": "preferences.sourceCode.JAVA",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.datasync-server [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.datasync-server [package].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;Spring Boot.DataSyncApplication.executor&quot;: &quot;Run&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/ldeaProjects44/datasync-server&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="DataSyncApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="datasync-server" />
@@ -70,6 +90,15 @@
       <option name="presentableId" value="Default" />
       <updated>1780880776934</updated>
       <workItem from="1780880778647" duration="4197000" />
+      <workItem from="1780900166924" duration="125000" />
+      <workItem from="1780900318552" duration="2865000" />
+      <workItem from="1780906931772" duration="77000" />
+      <workItem from="1780907364747" duration="158000" />
+      <workItem from="1780907747863" duration="12000" />
+      <workItem from="1780993916014" duration="57000" />
+      <workItem from="1782979345506" duration="2649000" />
+      <workItem from="1782982760727" duration="3578000" />
+      <workItem from="1783043215216" duration="11174000" />
     </task>
     <servers />
   </component>

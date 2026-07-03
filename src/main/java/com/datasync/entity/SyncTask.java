@@ -51,6 +51,12 @@ public class SyncTask {
     @Column(columnDefinition = "TEXT")
     private String incrementalWhere;
 
+    /** 目标表结构处理策略: CREATE_SCHEMA_WHEN_NOT_EXIST / RECREATE_SCHEMA / ERROR_WHEN_SCHEMA_NOT_EXIST / IGNORE */
+    private String schemaSaveMode = "CREATE_SCHEMA_WHEN_NOT_EXIST";
+
+    /** 目标表数据处理策略: APPEND_DATA / DROP_DATA / ERROR_WHEN_DATA_EXISTS */
+    private String dataSaveMode = "APPEND_DATA";
+
     @Column(columnDefinition = "TEXT")
     private String seatunnelConfig;
 
@@ -66,6 +72,8 @@ public class SyncTask {
         updatedAt = LocalDateTime.now();
         if (enabled == null) enabled = false;
         if (lastExecStatus == null) lastExecStatus = "NONE";
+        if (schemaSaveMode == null) schemaSaveMode = "CREATE_SCHEMA_WHEN_NOT_EXIST";
+        if (dataSaveMode == null) dataSaveMode = "APPEND_DATA";
     }
     @PreUpdate
     protected void onUpdate() {

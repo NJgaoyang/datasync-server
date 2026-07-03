@@ -303,39 +303,64 @@
         }
         /* 右侧 */
         .login-right {
-            flex: 1; display: flex; align-items: flex-start; justify-content: center;
-            background: #fff; min-width: 380px; padding-top: 140px;
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            background:
+                radial-gradient(circle at 82% 18%, rgba(102,126,234,0.08), transparent 34%),
+                linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            min-width: 420px; padding: 48px;
         }
         .login-card {
-            width: 380px; padding: 0 20px;
+            width: 420px; padding: 42px 44px 38px;
+            background: rgba(255,255,255,0.92);
+            border: 1px solid rgba(226,232,240,0.9);
+            border-radius: 24px;
+            box-shadow: 0 24px 70px rgba(45,55,72,0.12);
+            backdrop-filter: blur(10px);
         }
-        .login-header { margin-bottom: 36px; }
-        .login-header h2 { font-size: 28px; font-weight: 700; color: #1a202c; }
-        .login-header p { font-size: 14px; color: #a0aec0; margin-top: 6px; }
-        .login-form { display: flex; flex-direction: column; gap: 18px; }
+        .login-header { margin-bottom: 32px; }
+        .login-header h2 { font-size: 30px; font-weight: 800; color: #111827; letter-spacing: 0; }
+        .login-header h2::after {
+            content: ''; display: block; width: 42px; height: 4px;
+            background: linear-gradient(90deg, #667eea, #8b5cf6);
+            border-radius: 999px; margin-top: 14px;
+        }
+        .login-header p { font-size: 14px; color: #8a95a8; margin-top: 8px; }
+        .login-form { display: flex; flex-direction: column; gap: 20px; }
         .login-label {
-            display: block; font-size: 14px; color: #4a5568; font-weight: 600; margin-bottom: 6px;
+            display: block; font-size: 13px; color: #475569; font-weight: 700; margin-bottom: 8px;
         }
         .login-input {
-            width: 100%; height: 50px; padding: 0 18px;
-            border: 2px solid #e2e8f0; border-radius: 12px;
-            font-size: 15px; color: #2d3748; outline: none; transition: border-color 0.2s;
+            width: 100%; height: 52px; padding: 0 16px;
+            border: 1px solid #d9e2ef; border-radius: 14px;
+            font-size: 15px; color: #243044; outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+            background: #fbfdff;
+        }
+        .login-input:focus {
+            border-color: #667eea;
             background: #fff;
+            box-shadow: 0 0 0 4px rgba(102,126,234,0.12);
         }
-        .login-input:focus { border-color: #667eea; }
-        .login-input::placeholder { color: #cbd5e0; }
+        .login-input::placeholder { color: #b6c1d1; }
         .login-row {
-            display: flex; align-items: center; justify-content: space-between; font-size: 14px;
+            display: flex; align-items: center; justify-content: space-between; font-size: 13px;
+            margin-top: -2px;
         }
-        .login-remember { display: flex; align-items: center; gap: 6px; color: #718096; cursor: pointer; }
+        .login-remember { display: flex; align-items: center; gap: 7px; color: #64748b; cursor: pointer; }
         .login-remember input { accent-color: #667eea; }
-        .login-forgot { color: #667eea; text-decoration: none; font-weight: 500; cursor: pointer; }
+        .login-forgot { color: #667eea; text-decoration: none; font-weight: 700; cursor: pointer; }
         .login-submit {
-            width: 100%; height: 50px; border: none; border-radius: 12px;
-            background: #1a202c; color: #fff; font-size: 16px; font-weight: 600;
-            cursor: pointer; transition: opacity 0.2s; margin-top: 8px;
+            width: 100%; height: 52px; border: none; border-radius: 14px;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            color: #fff; font-size: 16px; font-weight: 700;
+            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s; margin-top: 6px;
+            box-shadow: 0 14px 26px rgba(17,24,39,0.18);
         }
-        .login-submit:hover:not(:disabled) { opacity: 0.9; }
+        .login-submit:hover:not(:disabled) {
+            opacity: 0.96;
+            transform: translateY(-1px);
+            box-shadow: 0 18px 32px rgba(17,24,39,0.22);
+        }
         .login-submit:disabled { opacity: 0.5; cursor: not-allowed; }
         .login-divider {
             display: flex; align-items: center; gap: 14px; color: #a0aec0; font-size: 13px;
@@ -351,6 +376,18 @@
         .login-google:hover { background: #f7fafc; }
         .login-register { text-align: center; font-size: 14px; color: #718096; margin-top: 12px; }
         .login-register a { color: #667eea; font-weight: 600; text-decoration: none; cursor: pointer; }
+        @media (max-width: 980px) {
+            .login-left { min-width: 360px; }
+            .login-right { min-width: 0; padding: 36px 28px; }
+            .login-card { width: min(420px, 100%); }
+        }
+        @media (max-width: 760px) {
+            .login-left { display: none; }
+            .login-right { padding: 32px 20px; }
+            .login-card { padding: 34px 26px 30px; border-radius: 20px; }
+            .login-header h2 { font-size: 26px; }
+            .login-row { align-items: flex-start; gap: 12px; flex-direction: column; }
+        }
         .menu-item.active i { opacity: 1; }
         .menu-badge {
             margin-left: auto; font-size: 10px; padding: 2px 7px;
@@ -820,6 +857,847 @@
         .info-item .info-label { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
         .info-item .info-value { font-size: 13.5px; color: var(--text-primary); font-weight: 500; }
 
+        /* ===== Visual refresh: quieter admin workspace, same interactions ===== */
+        body.light {
+            --bg-root: #eef2f7;
+            --bg-sidebar: #ffffff;
+            --bg-main: #f6f8fb;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f8fafc;
+            --bg-input: #f8fafc;
+            --border: #e2e8f0;
+            --border-light: #cbd5e1;
+            --text-primary: #172033;
+            --text-secondary: #526179;
+            --text-muted: #8491a6;
+            --accent: #2563eb;
+            --accent-light: #1d4ed8;
+            --accent-soft: #dbeafe;
+            --shadow-card: 0 1px 2px rgba(15,23,42,0.04), 0 10px 24px rgba(15,23,42,0.05);
+            --shadow-lg: 0 14px 34px rgba(15,23,42,0.10);
+            --table-header-bg: #f8fafc;
+            --table-row-border: #edf2f7;
+            --code-bg: #0f172a;
+            --code-color: #dbeafe;
+        }
+        :root {
+            --radius-sm: 6px;
+            --radius: 8px;
+            --radius-lg: 8px;
+            --radius-xl: 10px;
+        }
+        body {
+            background: var(--bg-root);
+            letter-spacing: 0;
+        }
+        * {
+            letter-spacing: 0 !important;
+        }
+        .bg-decoration { display: none; }
+        .app-container {
+            background:
+                linear-gradient(90deg, rgba(148,163,184,0.08) 1px, transparent 1px),
+                linear-gradient(180deg, rgba(148,163,184,0.08) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+        .sidebar {
+            box-shadow: 1px 0 0 rgba(15,23,42,0.03);
+        }
+        .sidebar::before {
+            background: linear-gradient(180deg, rgba(37,99,235,0.06), transparent 42%);
+        }
+        .sidebar-header {
+            padding: 20px 18px;
+        }
+        .sidebar-header .logo-icon {
+            border-radius: 8px;
+            background: #172033;
+            box-shadow: none;
+        }
+        .sidebar-header h1 {
+            background: none;
+            -webkit-text-fill-color: currentColor;
+            color: var(--text-primary);
+            letter-spacing: 0;
+        }
+        .menu-section {
+            padding: 18px 12px 7px;
+            letter-spacing: 0.08em;
+        }
+        .menu-item {
+            border: 1px solid transparent;
+            border-radius: 8px;
+            padding: 10px 12px;
+        }
+        .menu-item:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border);
+        }
+        .menu-item.active {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+            box-shadow: none;
+        }
+        body:not(.light) .menu-item.active {
+            background: rgba(37,99,235,0.14);
+            color: #93c5fd;
+            border-color: rgba(147,197,253,0.22);
+        }
+        .main-content {
+            background: transparent;
+        }
+        .page-header {
+            padding: 20px 32px 16px;
+            background: rgba(246,248,251,0.86);
+            box-shadow: 0 1px 0 rgba(15,23,42,0.05);
+        }
+        body:not(.light) .page-header {
+            background: rgba(13,18,37,0.88);
+        }
+        .page-header h2 {
+            font-size: 22px;
+            letter-spacing: 0;
+        }
+        .page-body {
+            padding: 24px 32px 32px;
+        }
+        .card,
+        .stat-card,
+        .dash-stat-card,
+        .ds-card,
+        .timeline-content,
+        .info-item,
+        .table-selector {
+            border-radius: 8px;
+            box-shadow: var(--shadow-card);
+        }
+        .card {
+            padding: 20px;
+            border-color: rgba(148,163,184,0.28);
+        }
+        .card:hover,
+        .stat-card:hover,
+        .dash-stat-card:hover,
+        .ds-card:hover {
+            transform: none;
+            box-shadow: var(--shadow-lg);
+        }
+        .card-title {
+            font-size: 15px;
+            margin-bottom: 14px;
+        }
+        .stat-row,
+        .dash-stats,
+        .ds-grid {
+            gap: 14px;
+        }
+        .stat-card,
+        .dash-stat-card,
+        .ds-card {
+            padding: 18px 20px;
+        }
+        .stat-card .stat-icon,
+        .dash-stat-icon,
+        .ds-card .ds-icon {
+            border-radius: 8px;
+        }
+        .stat-card .stat-value,
+        .dash-stat-num {
+            letter-spacing: 0;
+        }
+        .task-table {
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .task-table thead th {
+            padding: 11px 14px;
+            letter-spacing: 0.04em;
+            border-bottom: 1px solid var(--border);
+        }
+        .task-table tbody td {
+            padding: 12px 14px;
+        }
+        .task-table tbody tr:hover td {
+            background: rgba(37,99,235,0.04);
+        }
+        .status-tag {
+            border-radius: 999px;
+            padding: 4px 10px;
+        }
+        .code-block,
+        .log-viewer {
+            border-radius: 8px;
+            padding: 16px 18px;
+        }
+        .el-button {
+            border-radius: 7px !important;
+            font-weight: 600 !important;
+        }
+        .el-button--primary {
+            background: var(--accent) !important;
+            box-shadow: 0 6px 16px rgba(37,99,235,0.18) !important;
+        }
+        .el-button--primary:hover {
+            background: var(--accent-light) !important;
+            box-shadow: 0 10px 24px rgba(37,99,235,0.22) !important;
+        }
+        .el-input__wrapper,
+        .el-textarea__inner,
+        .el-select .el-input__wrapper {
+            border: 1px solid var(--border) !important;
+            border-radius: 7px !important;
+            transition: border-color var(--transition), box-shadow var(--transition) !important;
+        }
+        .el-input__wrapper.is-focus,
+        .el-textarea__inner:focus {
+            border-color: rgba(37,99,235,0.55) !important;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.10) !important;
+        }
+        .el-dialog {
+            border-radius: 10px !important;
+            box-shadow: 0 22px 70px rgba(15,23,42,0.24) !important;
+        }
+
+        /* ===== Premium workspace refresh: focused data-ops console ===== */
+        body.light {
+            --bg-root: #edf3f8;
+            --bg-sidebar: #ffffff;
+            --bg-main: #f4f7fb;
+            --bg-card: rgba(255,255,255,0.94);
+            --card-bg: rgba(255,255,255,0.94);
+            --bg-card-hover: #f8fbff;
+            --bg-input: #f7f9fc;
+            --border: #dce5ef;
+            --border-light: #c7d4e3;
+            --border-accent: #0f766e;
+            --text-primary: #152033;
+            --text-secondary: #52627a;
+            --text-muted: #8794a8;
+            --accent: #2563eb;
+            --accent-light: #1d4ed8;
+            --accent-soft: #dbeafe;
+            --success: #0f9f6e;
+            --success-soft: #d8f6e8;
+            --warning: #d97706;
+            --warning-soft: #fff3d6;
+            --danger: #dc2626;
+            --danger-soft: #fee2e2;
+            --info: #0891b2;
+            --info-soft: #d9f3f8;
+            --shadow-card: 0 1px 2px rgba(15,23,42,0.04), 0 18px 46px rgba(32,54,86,0.08);
+            --shadow-lg: 0 22px 70px rgba(32,54,86,0.14);
+            --table-header-bg: #f3f7fb;
+            --table-row-border: #e8eef6;
+            --code-bg: #0f172a;
+            --code-color: #dbeafe;
+        }
+        :root {
+            --bg-root: #070b13;
+            --bg-sidebar: #0b1020;
+            --bg-main: #0f1724;
+            --bg-card: rgba(18,27,43,0.92);
+            --card-bg: rgba(18,27,43,0.92);
+            --bg-card-hover: rgba(25,37,58,0.96);
+            --bg-input: rgba(15,23,42,0.82);
+            --border: rgba(148,163,184,0.17);
+            --border-light: rgba(148,163,184,0.28);
+            --border-accent: #14b8a6;
+            --text-primary: #edf4ff;
+            --text-secondary: #a8b4c7;
+            --text-muted: #718096;
+            --accent: #60a5fa;
+            --accent-light: #93c5fd;
+            --accent-soft: rgba(96,165,250,0.16);
+            --success: #34d399;
+            --success-soft: rgba(52,211,153,0.15);
+            --warning: #fbbf24;
+            --warning-soft: rgba(251,191,36,0.16);
+            --danger: #fb7185;
+            --danger-soft: rgba(251,113,133,0.16);
+            --info: #22d3ee;
+            --info-soft: rgba(34,211,238,0.14);
+            --radius-sm: 8px;
+            --radius: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 18px;
+            --shadow-card: 0 16px 44px rgba(0,0,0,0.26);
+            --shadow-lg: 0 26px 72px rgba(0,0,0,0.36);
+            --table-header-bg: rgba(15,23,42,0.76);
+            --table-row-border: rgba(148,163,184,0.12);
+            --code-bg: #080f1e;
+            --code-color: #dbeafe;
+        }
+        body {
+            background: var(--bg-root);
+        }
+        .app-container {
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.68), rgba(255,255,255,0) 220px),
+                linear-gradient(90deg, rgba(37,99,235,0.06), rgba(20,184,166,0.06) 46%, rgba(245,158,11,0.05)),
+                var(--bg-main);
+        }
+        body:not(.light) .app-container {
+            background:
+                linear-gradient(180deg, rgba(30,41,59,0.58), rgba(15,23,36,0) 240px),
+                linear-gradient(90deg, rgba(96,165,250,0.08), rgba(20,184,166,0.06), rgba(251,191,36,0.04)),
+                var(--bg-main);
+        }
+        .sidebar {
+            width: 276px; min-width: 276px;
+            background:
+                linear-gradient(180deg, rgba(37,99,235,0.16), rgba(20,184,166,0.07) 42%, rgba(17,24,39,0) 74%),
+                var(--bg-sidebar);
+            border-right: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 14px 0 40px rgba(15,23,42,0.13);
+        }
+        .sidebar::before {
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.05), transparent 28%),
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: auto, 24px 24px;
+            opacity: 0.8;
+        }
+        .sidebar.collapsed {
+            width: 74px; min-width: 74px;
+        }
+        .sidebar-header {
+            padding: 22px 18px 20px;
+            border-bottom-color: rgba(255,255,255,0.08);
+            align-items: center;
+        }
+        .sidebar-header .logo-icon {
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #2563eb, #14b8a6);
+            box-shadow: 0 12px 28px rgba(20,184,166,0.22);
+        }
+        .sidebar-header h1 {
+            color: #f8fafc;
+            background: none;
+            -webkit-text-fill-color: currentColor;
+            letter-spacing: 0;
+            font-size: 20px;
+        }
+        .sidebar-header .subtitle {
+            color: rgba(226,232,240,0.62);
+            letter-spacing: 0;
+        }
+        .collapse-toggle, .theme-toggle {
+            width: 30px; height: 30px;
+            display: inline-flex; align-items: center; justify-content: center;
+            color: rgba(226,232,240,0.66);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.07);
+        }
+        .collapse-toggle:hover, .theme-toggle:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.18);
+        }
+        .sidebar-menu {
+            padding: 12px;
+        }
+        .menu-section {
+            color: rgba(226,232,240,0.46);
+            letter-spacing: 0.08em !important;
+            padding: 18px 13px 8px;
+        }
+        .menu-item {
+            color: rgba(226,232,240,0.72);
+            border-radius: 10px;
+            padding: 11px 12px;
+            margin-bottom: 5px;
+            border: 1px solid transparent;
+        }
+        .menu-item i {
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: rgba(226,232,240,0.74);
+            background: rgba(255,255,255,0.05);
+        }
+        .menu-item:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            border-color: rgba(255,255,255,0.08);
+        }
+        .menu-item.active {
+            background: rgba(255,255,255,0.13);
+            color: #fff;
+            border-color: rgba(255,255,255,0.18);
+            box-shadow: inset 3px 0 0 #2dd4bf;
+        }
+        .menu-item.active i {
+            background: #f8fafc;
+            color: #0f766e;
+        }
+        .sidebar-footer {
+            margin: 10px 12px 14px;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            background: rgba(255,255,255,0.06);
+            color: rgba(226,232,240,0.78);
+        }
+        .sidebar-footer .user-avatar {
+            color: #5eead4;
+        }
+        .sidebar-footer .logout-btn {
+            color: rgba(226,232,240,0.66) !important;
+        }
+        body.light .sidebar {
+            background:
+                linear-gradient(180deg, rgba(37,99,235,0.06), rgba(20,184,166,0.04) 46%, rgba(255,255,255,0) 78%),
+                var(--bg-sidebar);
+            border-right-color: rgba(203,213,225,0.78);
+            box-shadow: 12px 0 34px rgba(32,54,86,0.08);
+        }
+        body.light .sidebar::before {
+            background:
+                linear-gradient(180deg, rgba(37,99,235,0.04), transparent 36%),
+                linear-gradient(90deg, rgba(148,163,184,0.10) 1px, transparent 1px);
+            background-size: auto, 24px 24px;
+            opacity: 0.7;
+        }
+        body.light .sidebar-header {
+            border-bottom-color: rgba(226,232,240,0.9);
+        }
+        body.light .sidebar-header h1 {
+            color: #152033;
+        }
+        body.light .sidebar-header .subtitle {
+            color: #8794a8;
+        }
+        body.light .collapse-toggle,
+        body.light .theme-toggle {
+            color: #64748b;
+            background: #f7f9fc;
+            border-color: #dce5ef;
+        }
+        body.light .collapse-toggle:hover,
+        body.light .theme-toggle:hover {
+            color: #0f766e;
+            background: #eef7f6;
+            border-color: rgba(15,118,110,0.22);
+        }
+        body.light .menu-section {
+            color: #94a3b8;
+        }
+        body.light .menu-item {
+            color: #52627a;
+        }
+        body.light .menu-item i {
+            color: #64748b;
+            background: #f1f5f9;
+        }
+        body.light .menu-item:hover {
+            background: #f6f9fd;
+            color: #152033;
+            border-color: #e2e8f0;
+        }
+        body.light .menu-item.active {
+            background: linear-gradient(135deg, rgba(37,99,235,0.10), rgba(20,184,166,0.10));
+            color: #0f766e;
+            border-color: rgba(20,184,166,0.26);
+            box-shadow: inset 3px 0 0 #14b8a6;
+        }
+        body.light .menu-item.active i {
+            background: #0f766e;
+            color: #ffffff;
+        }
+        body.light .sidebar-footer {
+            background: #f8fafc;
+            border-color: #e2e8f0;
+            color: #52627a;
+        }
+        body.light .sidebar-footer .user-avatar {
+            color: #0f766e;
+        }
+        body.light .sidebar-footer .logout-btn {
+            color: #64748b !important;
+        }
+        .main-content {
+            background: transparent;
+        }
+        .page-header {
+            position: sticky;
+            top: 0;
+            z-index: 12;
+            padding: 22px 34px 18px;
+            background: rgba(244,247,251,0.84);
+            border-bottom: 1px solid rgba(203,213,225,0.65);
+            box-shadow: 0 12px 30px rgba(15,23,42,0.04);
+            backdrop-filter: blur(18px);
+        }
+        body:not(.light) .page-header {
+            background: rgba(15,23,36,0.84);
+            border-bottom-color: rgba(148,163,184,0.14);
+        }
+        .page-header h2 {
+            font-size: 24px;
+            line-height: 1.2;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: 0;
+        }
+        .page-header p {
+            margin-top: 6px;
+            color: var(--text-secondary);
+        }
+        .page-body {
+            padding: 28px 34px 36px;
+        }
+        .card,
+        .dash-stat-card,
+        .stat-card,
+        .ds-card,
+        .table-selector,
+        .timeline-content,
+        .info-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+        }
+        .card {
+            padding: 22px;
+            margin-bottom: 18px;
+            overflow: visible;
+        }
+        .card:hover,
+        .dash-stat-card:hover,
+        .stat-card:hover,
+        .ds-card:hover {
+            transform: translateY(-1px);
+            border-color: var(--border-light);
+            box-shadow: var(--shadow-lg);
+        }
+        .card-title {
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0;
+            gap: 9px;
+            margin-bottom: 16px;
+        }
+        .card-title i {
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9px;
+            background: var(--accent-soft);
+            color: var(--accent-light);
+        }
+        .card-title .count-badge {
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: var(--accent-light);
+            padding: 3px 10px;
+        }
+        .dash-stats,
+        .stat-row,
+        .ds-grid {
+            gap: 16px;
+        }
+        .dash-stat-card,
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+            padding: 20px 22px;
+        }
+        .dash-stat-card::after,
+        .stat-card::after,
+        .ds-card::after {
+            content: '';
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            top: 0;
+            height: 3px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--accent), var(--info), var(--success));
+            opacity: 0.72;
+        }
+        .dash-stat-icon,
+        .stat-card .stat-icon,
+        .ds-card .ds-icon {
+            border-radius: 12px;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.28);
+        }
+        .dash-stat-num,
+        .stat-card .stat-value {
+            font-size: 30px;
+            letter-spacing: 0;
+        }
+        .dash-stat-lbl,
+        .stat-card .stat-label {
+            color: var(--text-secondary);
+            font-weight: 700;
+        }
+        .dash-stat-sub,
+        .stat-card .stat-sub {
+            color: var(--text-muted);
+        }
+        .ds-card {
+            position: relative;
+            padding: 20px;
+            min-height: 210px;
+        }
+        .ds-card::before {
+            width: 4px;
+            border-radius: 999px;
+            opacity: 0.9;
+        }
+        .ds-card .ds-name {
+            font-size: 16px;
+            font-weight: 800;
+        }
+        .ds-card .ds-type-tag,
+        .sync-type-tag,
+        .engine-badge,
+        .status-tag {
+            border-radius: 999px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+        .ds-card .ds-info .info-row {
+            min-height: 28px;
+            padding: 4px 0;
+        }
+        .ds-card .ds-info .info-row i {
+            width: 22px;
+            color: var(--text-muted);
+        }
+        .ds-card .ds-actions {
+            gap: 8px;
+            padding-top: 12px;
+        }
+        .task-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--bg-card);
+        }
+        .task-table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            padding: 13px 16px;
+            background: var(--table-header-bg);
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+            letter-spacing: 0.04em !important;
+        }
+        .task-table tbody td {
+            padding: 13px 16px;
+            border-bottom: 1px solid var(--table-row-border);
+            color: var(--text-secondary);
+        }
+        .task-table tbody tr {
+            transition: background var(--transition), transform var(--transition);
+        }
+        .task-table tbody tr:hover td {
+            background: rgba(37,99,235,0.045);
+        }
+        body:not(.light) .task-table tbody tr:hover td {
+            background: rgba(96,165,250,0.07);
+        }
+        .task-table .task-name {
+            color: var(--text-primary);
+            font-weight: 800;
+        }
+        .status-tag {
+            min-height: 26px;
+            padding: 5px 10px;
+            border: 1px solid transparent;
+        }
+        .status-tag.success,
+        .status-tag.published,
+        .status-tag.running {
+            border-color: rgba(15,159,110,0.18);
+        }
+        .status-tag.failed {
+            border-color: rgba(220,38,38,0.18);
+        }
+        .status-tag.pending {
+            border-color: rgba(217,119,6,0.18);
+        }
+        .search-bar,
+        .steps-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+        }
+        .steps-bar {
+            padding: 8px;
+            gap: 8px;
+        }
+        .step-item {
+            border-radius: 11px;
+            border: 1px solid transparent;
+            font-weight: 800;
+        }
+        .step-item.active {
+            background: linear-gradient(135deg, var(--accent), var(--info));
+            box-shadow: 0 12px 26px rgba(37,99,235,0.2);
+        }
+        .step-item.done {
+            color: var(--success);
+            background: var(--success-soft);
+            border-color: rgba(15,159,110,0.16);
+        }
+        .table-selector {
+            background: var(--bg-input);
+        }
+        .table-row {
+            border-bottom-color: var(--table-row-border);
+            border-radius: 9px;
+            margin: 2px 4px;
+            padding: 11px 12px;
+        }
+        .table-row:hover {
+            background: rgba(37,99,235,0.07);
+        }
+        .info-grid {
+            gap: 12px;
+        }
+        .info-item {
+            padding: 14px 16px;
+            box-shadow: none;
+        }
+        .info-item .info-label {
+            letter-spacing: 0.06em !important;
+            color: var(--text-muted);
+        }
+        .info-item .info-value {
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .empty-state {
+            background: var(--bg-card);
+            border: 1px dashed var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 54px 22px;
+        }
+        .empty-state .empty-icon {
+            color: var(--accent-light);
+            background: var(--accent-soft);
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .code-block,
+        .log-viewer {
+            border: 1px solid rgba(96,165,250,0.14);
+            border-radius: 14px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+        }
+        .el-button {
+            border-radius: 10px !important;
+            font-weight: 800 !important;
+            letter-spacing: 0 !important;
+        }
+        .el-button--primary {
+            background: linear-gradient(135deg, #2563eb, #0891b2) !important;
+            border: none !important;
+            box-shadow: 0 12px 24px rgba(37,99,235,0.18) !important;
+        }
+        .el-button--primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #0f766e) !important;
+            box-shadow: 0 16px 30px rgba(37,99,235,0.24) !important;
+            transform: translateY(-1px);
+        }
+        .el-button--success {
+            background: #0f9f6e !important;
+            border-color: #0f9f6e !important;
+        }
+        .el-button--warning {
+            background: #d97706 !important;
+            border-color: #d97706 !important;
+        }
+        .el-button--danger {
+            background: #dc2626 !important;
+            border-color: #dc2626 !important;
+        }
+        .el-input__wrapper,
+        .el-textarea__inner,
+        .el-select .el-input__wrapper {
+            min-height: 38px;
+            background: var(--bg-input) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 10px !important;
+            box-shadow: none !important;
+        }
+        .el-input__wrapper.is-focus,
+        .el-textarea__inner:focus,
+        .el-select .el-input__wrapper.is-focus {
+            border-color: rgba(37,99,235,0.56) !important;
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.10) !important;
+        }
+        .el-radio-button__inner {
+            font-weight: 800 !important;
+            border-color: var(--border) !important;
+        }
+        .el-radio-button__original-radio:checked + .el-radio-button__inner {
+            background: #0f766e !important;
+            border-color: #0f766e !important;
+            box-shadow: -1px 0 0 0 #0f766e !important;
+        }
+        .el-tabs__item {
+            font-weight: 800 !important;
+        }
+        .el-tabs__active-bar {
+            height: 3px !important;
+            border-radius: 999px !important;
+            background: linear-gradient(90deg, var(--accent), var(--info)) !important;
+        }
+        .el-dialog {
+            border-radius: 18px !important;
+            overflow: hidden;
+            border: 1px solid var(--border) !important;
+            background: var(--bg-card) !important;
+        }
+        .el-dialog__header {
+            background: linear-gradient(180deg, var(--bg-card-hover), var(--bg-card)) !important;
+        }
+        .el-dialog__body {
+            background: var(--bg-card) !important;
+        }
+        .el-dropdown-menu,
+        .el-select-dropdown,
+        .el-picker-panel {
+            border-radius: 12px !important;
+            border-color: var(--border) !important;
+            box-shadow: var(--shadow-lg) !important;
+        }
+        @media (max-width: 1100px) {
+            .sidebar {
+                width: 236px; min-width: 236px;
+            }
+            .page-header,
+            .page-body {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+        }
+        @media (max-width: 680px) {
+            .page-body { padding: 18px 16px 28px; }
+            .page-header { padding: 16px; }
+            .stat-row,
+            .dash-stats,
+            .info-grid.cols-2,
+            .info-grid.cols-3 { grid-template-columns: 1fr; }
+        }
+
         @media (max-width: 1200px) {
             .stat-row { grid-template-columns: repeat(2, 1fr); }
             .info-grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
@@ -830,6 +1708,34 @@
             .ds-grid { grid-template-columns: 1fr; }
             .page-body { padding: 20px 24px; }
             .info-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 760px) {
+            .app-container { min-width: 0; }
+            .sidebar,
+            .sidebar.collapsed { width: 72px; min-width: 72px; }
+            .sidebar-header { padding: 16px 10px; justify-content: center; }
+            .sidebar-header .logo { justify-content: center; }
+            .sidebar-header .logo > div:last-child,
+            .sidebar-header .header-actions,
+            .menu-section,
+            .menu-item span,
+            .sidebar-footer .user-name,
+            .sidebar-footer .logout-btn { display: none; }
+            .sidebar-menu { padding: 10px 8px; }
+            .menu-item { justify-content: center; padding: 10px 0; }
+            .menu-item i { margin: 0; }
+            .sidebar-footer { margin: 8px; justify-content: center; padding: 10px 0; }
+            .main-content { min-width: 0; }
+            .page-header { padding: 16px 18px 14px; }
+            .page-header h2 { font-size: 20px; }
+            .page-body { padding: 18px; }
+            .dash-stats,
+            .stat-row,
+            .info-grid.cols-2,
+            .info-grid.cols-3 { grid-template-columns: 1fr; }
+            .card { padding: 18px; }
+            .task-table { min-width: 720px; }
+            .card[style*="overflow:hidden"] { overflow-x: auto !important; }
         }
     </style>
 </head>
@@ -916,16 +1822,6 @@
                 <div class="menu-item" :class="{active: currentPage==='dashboard'}" @click="currentPage='dashboard'" title="仪表盘">
                     <i class="fas fa-th-large"></i> <span>仪表盘</span>
                 </div>
-                <div class="menu-section">管理</div>
-                <div class="menu-item" :class="{active: currentPage==='datasource'}" @click="currentPage='datasource'" title="数据源管理">
-                    <i class="fas fa-database"></i> <span>数据源管理</span>
-                </div>
-                <div class="menu-item" :class="{active: currentPage==='metadata'}" @click="currentPage='metadata'" title="元数据浏览">
-                    <i class="fas fa-sitemap"></i> <span>元数据浏览</span>
-                </div>
-                <div class="menu-item" :class="{active: currentPage==='sys-cluster'}" @click="currentPage='sys-cluster'" title="集群配置">
-                    <i class="fas fa-server"></i> <span>集群配置</span>
-                </div>
                 <div class="menu-section">同步</div>
                 <div class="menu-item" v-if="!isReadonly" :class="{active: currentPage==='create-task'}" @click="currentPage='create-task'" title="创建同步任务">
                     <i class="fas fa-plus-circle"></i> <span>创建同步任务</span>
@@ -935,6 +1831,19 @@
                 </div>
                 <div class="menu-item" :class="{active: currentPage==='tasks-realtime'}" @click="currentPage='tasks-realtime'" title="实时任务">
                     <i class="fas fa-bolt"></i> <span>实时任务</span>
+                </div>
+                <div class="menu-item" :class="{active: currentPage==='synced-tables'}" @click="currentPage='synced-tables'" title="已同步库表">
+                    <i class="fas fa-table-cells"></i> <span>已同步库表</span>
+                </div>
+                <div class="menu-section">管理</div>
+                <div class="menu-item" :class="{active: currentPage==='datasource'}" @click="currentPage='datasource'" title="数据源管理">
+                    <i class="fas fa-database"></i> <span>数据源管理</span>
+                </div>
+                <div class="menu-item" :class="{active: currentPage==='metadata'}" @click="currentPage='metadata'" title="元数据浏览">
+                    <i class="fas fa-sitemap"></i> <span>元数据浏览</span>
+                </div>
+                <div class="menu-item" :class="{active: currentPage==='sys-cluster'}" @click="currentPage='sys-cluster'" title="集群配置">
+                    <i class="fas fa-server"></i> <span>集群配置</span>
                 </div>
                 <div class="menu-section">监控</div>
                 <div class="menu-item" :class="{active: currentPage==='task-log'}" @click="currentPage='task-log'" title="任务日志">
@@ -982,25 +1891,25 @@
                         <div class="dash-stat-card">
                             <div class="dash-stat-icon" style="background:rgba(74,108,247,0.12);color:var(--accent)"><i class="fas fa-list-check"></i></div>
                             <div class="dash-stat-body">
-                                <div class="dash-stat-num" style="color:var(--accent-light)">{{ dashFilteredTasks.length }}</div>
+                                <div class="dash-stat-num" style="color:var(--accent-light)">{{ dashStats.total }}</div>
                                 <div class="dash-stat-lbl">任务总数</div>
-                                <div class="dash-stat-sub" v-if="dashTab==='all'">实时 {{ dashFilteredTasks.filter(t=>t.syncType==='realtime').length }} / 离线 {{ dashFilteredTasks.filter(t=>t.syncType==='batch').length }}</div>
+                                <div class="dash-stat-sub" v-if="dashTab==='all'">实时 {{ dashboardStats.realtime.total }} / 离线 {{ dashboardStats.batch.total }}</div>
                             </div>
                         </div>
                         <div class="dash-stat-card">
                             <div class="dash-stat-icon" style="background:rgba(16,185,129,0.12);color:var(--success)"><i class="fas fa-check-circle"></i></div>
                             <div class="dash-stat-body">
-                                <div class="dash-stat-num" style="color:var(--success)">{{ dashFilteredTasks.filter(t=>t.lastExecStatus==='SUCCESS').length }}</div>
+                                <div class="dash-stat-num" style="color:var(--success)">{{ dashStats.success }}</div>
                                 <div class="dash-stat-lbl">成功</div>
-                                <div class="dash-stat-sub" v-if="dashTab==='all'">实时 {{ dashFilteredTasks.filter(t=>t.lastExecStatus==='SUCCESS'&&t.syncType==='realtime').length }} / 离线 {{ dashFilteredTasks.filter(t=>t.lastExecStatus==='SUCCESS'&&t.syncType==='batch').length }}</div>
+                                <div class="dash-stat-sub" v-if="dashTab==='all'">实时 {{ dashboardStats.realtime.success }} / 离线 {{ dashboardStats.batch.success }}</div>
                             </div>
                         </div>
                         <div class="dash-stat-card">
                             <div class="dash-stat-icon" style="background:rgba(239,68,68,0.12);color:var(--danger)"><i class="fas fa-times-circle"></i></div>
                             <div class="dash-stat-body">
-                                <div class="dash-stat-num" style="color:var(--danger)">{{ dashFilteredTasks.filter(t=>t.lastExecStatus==='FAILED').length }}</div>
+                                <div class="dash-stat-num" style="color:var(--danger)">{{ dashStats.failed }}</div>
                                 <div class="dash-stat-lbl">失败</div>
-                                <div class="dash-stat-sub" v-if="dashTab==='all'">实时 {{ dashFilteredTasks.filter(t=>t.lastExecStatus==='FAILED'&&t.syncType==='realtime').length }} / 离线 {{ dashFilteredTasks.filter(t=>t.lastExecStatus==='FAILED'&&t.syncType==='batch').length }}</div>
+                                <div class="dash-stat-sub" v-if="dashTab==='all'">实时 {{ dashboardStats.realtime.failed }} / 离线 {{ dashboardStats.batch.failed }}</div>
                             </div>
                         </div>
                     </div>
@@ -1238,6 +2147,14 @@
                             <el-form-item label="增量条件" v-if="taskForm.syncType==='batch'">
                                 <el-input v-model="taskForm.incrementalWhere" placeholder="为空则全量同步，例：create_time >= DATE_SUB(NOW(), INTERVAL 1 DAY)"></el-input>
                             </el-form-item>
+                            <el-form-item label="目标策略">
+                                <el-select v-model="taskForm.targetWriteMode" @change="onTargetWriteModeChange" style="width:100%">
+                                    <el-option label="自动建表/补字段，保留已有数据" value="auto_create"></el-option>
+                                    <el-option label="表存在则删除重建" value="recreate"></el-option>
+                                    <el-option label="全量覆盖已有数据" value="overwrite"></el-option>
+                                    <el-option label="仅追加，不处理表结构" value="append_only"></el-option>
+                                </el-select>
+                            </el-form-item>
                             <el-form-item label="目标集群" v-if="taskForm.engine==='ZETA' || taskForm.deployMode==='cluster'">
                                 <el-select v-model="taskForm.clusterId" placeholder="选择集群节点" style="width:100%" clearable>
                                     <el-option v-for="c in clusterList" :key="c.id" :label="c.clientName+' ('+c.host+':'+c.port+')'" :value="c.id"></el-option>
@@ -1279,10 +2196,6 @@
                         <template v-if="taskForm.syncType==='realtime'">
                             <div class="card-title" style="margin-top:16px"><i class="fas fa-sliders-h"></i> 高级配置</div>
                             <el-form :model="taskForm" label-width="100px" size="default" class="form-left-label">
-                                <el-row :gutter="12">
-                                    <el-col :span="7"><el-form-item label="Schema保存模式" label-width="145px"><el-select v-model="taskForm.rtSchemaSaveMode" size="default" style="width:100%"><el-option label="不存在则创建" value="CREATE_SCHEMA_WHEN_NOT_EXIST"></el-option><el-option label="重新创建" value="RECREATE_SCHEMA"></el-option></el-select></el-form-item></el-col>
-                                    <el-col :span="6" :offset="1"><el-form-item label="数据保存模式"><el-select v-model="taskForm.rtDataSaveMode" size="default" style="width:100%"><el-option label="追加数据" value="APPEND_DATA"></el-option><el-option label="清空后重写" value="DROP_DATA"></el-option></el-select></el-form-item></el-col>
-                                </el-row>
                                 <el-row :gutter="12">
                                     <el-col :span="5"><el-form-item label="并行度" label-width="50px"><el-input v-model="taskForm.rtParallelism" size="default" style="width:100%"></el-input></el-form-item></el-col>
                                     <el-col :span="5" :offset="1"><el-form-item label="启动模式" label-width="60px"><el-select v-model="taskForm.rtStartupMode" size="default" @change="onRtStartupChange" style="width:100%">
@@ -1336,6 +2249,7 @@
                                 <div class="info-item"><div class="info-label">同步类型</div><div class="info-value" :style="{color: taskForm.syncType==='realtime'?'var(--success)':'var(--accent)'}">{{ taskForm.syncType==='realtime'?'实时同步(CDC)':'批量同步(BATCH)' }}</div></div>
                                 <div class="info-item"><div class="info-label">源端</div><div class="info-value">{{ taskForm.sourceDatabase }} <span style="color:var(--text-muted);font-size:12px">({{ getDsName(taskForm.sourceId) }})</span></div></div>
                                 <div class="info-item"><div class="info-label">目标</div><div class="info-value">{{ taskForm.targetDatabase }} <span style="color:var(--text-muted);font-size:12px">({{ getDsName(taskForm.targetId) }})</span></div></div>
+                                <div class="info-item"><div class="info-label">目标策略</div><div class="info-value">{{ targetWriteModeText(taskForm.targetWriteMode) }}</div></div>
                             </div>
                             <div style="font-size:15px;color:var(--accent);font-weight:700;margin-top:4px">同步表数：{{ taskSelectedTables.length }} 张</div>
                         </div>
@@ -1347,6 +2261,41 @@
                             <el-button @click="createStep=2"><i class="fas fa-arrow-left" style="margin-right:6px"></i>上一步</el-button>
                             <el-button type="primary" size="large" @click="submitTask" :loading="submitting"><i class="fas fa-rocket" style="margin-right:8px"></i>提交任务</el-button>
                         </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- ═══════════ 已同步库表 ═══════════ -->
+            <template v-if="currentPage==='synced-tables'">
+                <div class="page-header">
+                    <h2>已同步库表</h2>
+                    <p>展示已上线或已执行任务中的库表映射关系</p>
+                </div>
+                <div class="page-body">
+                    <div class="card" style="padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                        <span style="font-size:14px;color:var(--text-secondary);white-space:nowrap;font-weight:500">搜索</span>
+                        <el-input v-model="syncedTableKeyword" placeholder="任务名 / 源表 / 目标表" size="default" style="flex:1 1 240px;max-width:360px" clearable></el-input>
+                        <el-button size="default" @click="loadSyncedTables"><i class="fas fa-sync-alt" style="margin-right:4px"></i>刷新</el-button>
+                    </div>
+                    <div class="card" v-if="filteredSyncedTables.length" style="padding:0;overflow:hidden">
+                        <table class="task-table">
+                            <thead><tr><th style="width:180px">所在任务</th><th style="width:90px">类型</th><th>源库表</th><th>目标库表</th><th style="width:90px">任务状态</th><th style="width:150px">配置时间</th></tr></thead>
+                            <tbody><tr v-for="row in filteredSyncedTables" :key="row.id">
+                                <td>
+                                    <div class="task-name" style="cursor:pointer" @click="viewTaskDetail({id: row.taskId})">{{ row.taskName }}</div>
+                                    <div style="font-size:11px;color:var(--text-muted)">ID: {{ row.taskId }}</div>
+                                </td>
+                                <td><span class="sync-type-tag" :class="row.syncType || 'batch'">{{ row.syncType==='realtime'?'实时':'离线' }}</span></td>
+                                <td style="font-family:'JetBrains Mono',monospace;font-size:12.5px">{{ row.sourceDatabase }}.<b>{{ row.sourceTable }}</b></td>
+                                <td style="font-family:'JetBrains Mono',monospace;font-size:12.5px">{{ row.targetDatabase }}.<b>{{ row.targetTable }}</b></td>
+                                <td><span class="status-tag" :class="execStatusClass(row.lastExecStatus)"><span class="dot"></span>{{ row.enabled ? '在线' : execStatusText(row.lastExecStatus) }}</span></td>
+                                <td style="font-size:12px;color:var(--text-secondary)">{{ formatTime(row.createdAt) }}</td>
+                            </tr></tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state" v-else>
+                        <div class="empty-icon"><i class="fas fa-table-cells"></i></div>
+                        <p>{{ syncedTableKeyword ? '没有匹配的库表' : '暂无已同步库表' }}</p>
                     </div>
                 </div>
             </template>
@@ -1422,7 +2371,7 @@
                                     <td>
                                         <div style="display:flex;align-items:center;gap:4px">
                                             <template v-if="!isReadonly">
-                                            <el-button size="small" type="success" @click="executeTask(task)" :disabled="!task.enabled || task.lastExecStatus==='RUNNING'" :title="!task.enabled?'离线状态下不能执行':'手动执行一次'">运行</el-button>
+                                            <el-button size="small" type="success" @click="executeTask(task)" :loading="executingTaskIds.has(task.id)" :disabled="!task.enabled || task.lastExecStatus==='RUNNING' || executingTaskIds.has(task.id)" :title="!task.enabled?'离线状态下不能执行':'手动执行一次'">运行</el-button>
                                             <el-button v-if="task.lastExecStatus==='RUNNING'" size="small" type="danger" @click="stopTask(task)">停止</el-button>
                                             <el-button size="small" @click="val => toggleTaskEnabled(task, task.enabled ? false : true)" :type="task.enabled?'warning':'primary'" :disabled="task.enabled && task.lastExecStatus==='RUNNING'" :title="task.enabled && task.lastExecStatus==='RUNNING'?'运行中，请先停止再下线':'下线'" style="padding:5px 10px">{{ task.enabled ? '下线' : '上线' }}</el-button>
                                             <el-dropdown trigger="click" @command="cmd => handleTaskCommand(cmd, task)">
@@ -1472,7 +2421,7 @@
                                     <td>
                                         <div style="display:flex;align-items:center;gap:4px">
                                             <template v-if="!isReadonly">
-                                            <el-button size="small" type="success" @click="executeTask(task)" :disabled="!task.enabled || task.lastExecStatus==='RUNNING'" :title="!task.enabled?'离线状态下不能执行':'手动执行一次'">运行</el-button>
+                                            <el-button size="small" type="success" @click="executeTask(task)" :loading="executingTaskIds.has(task.id)" :disabled="!task.enabled || task.lastExecStatus==='RUNNING' || executingTaskIds.has(task.id)" :title="!task.enabled?'离线状态下不能执行':'手动执行一次'">运行</el-button>
                                             <el-button v-if="task.lastExecStatus==='RUNNING'" size="small" type="danger" @click="stopTask(task)">停止</el-button>
                                             <el-button size="small" @click="val => toggleTaskEnabled(task, task.enabled ? false : true)" :type="task.enabled?'warning':'primary'" :disabled="task.enabled && task.lastExecStatus==='RUNNING'" :title="task.enabled && task.lastExecStatus==='RUNNING'?'运行中，请先停止再下线':'下线'" style="padding:5px 10px">{{ task.enabled ? '下线' : '上线' }}</el-button>
                                             <el-dropdown trigger="click" @command="cmd => handleTaskCommand(cmd, task)">
@@ -1521,28 +2470,6 @@
                                 </tr></tbody>
                             </table>
                             <div class="empty-state" v-else style="padding:30px"><p style="font-size:13px">无表映射数据</p></div>
-                            <div v-if="taskDetailTables.length && !isReadonly" style="margin-top: 16px; padding: 14px 18px; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border);">
-                                <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap">
-                                    <span style="font-weight:600; font-size:14px; color: var(--text-primary)"><i class="fas fa-database" style="margin-right:6px;color:var(--accent)"></i>同步建表</span>
-                                    <span style="font-size:12px; color:var(--text-muted)">将 DDL 执行到目标 StarRocks</span>
-                                    <el-checkbox v-model="syncDdlDrop" size="mini" style="margin-left:auto">已有表则先删除再建</el-checkbox>
-                                </div>
-                                <div style="margin-top:10px;display:flex;align-items:center;gap:10px">
-                                    <el-button type="primary" size="small" @click="syncDdl" :loading="syncingDdl" :disabled="syncingDdl">
-                                        <i class="fas fa-sync-alt" style="margin-right:4px"></i>{{ syncingDdl ? '执行中...' : '开始建表' }}
-                                    </el-button>
-                                    <span v-if="syncDdlResult" style="font-size:12px" :style="{color: syncDdlOk ? 'var(--success)' : 'var(--danger)'}">
-                                        {{ syncDdlResult }}
-                                    </span>
-                                </div>
-                                <div v-if="syncDdlResults.length && !syncDdlOk" style="margin-top:8px;font-size:12px">
-                                    <div v-for="r in syncDdlResults" :key="r.table">
-                                        <span v-if="!r.success" style="color:var(--danger)">
-                                            <span style="font-family:monospace">{{ r.table }}</span>: {{ r.message }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
                         </el-tab-pane>
                         <el-tab-pane label="SeaTunnel配置" name="config">
                             <div class="code-block" style="max-height:420px">{{ taskDetail.seatunnelConfig || '未生成' }}</div>
@@ -1584,6 +2511,19 @@
                         <el-form-item label="任务名称"><el-input v-model="taskEditForm.taskName"></el-input></el-form-item>
                         <el-form-item label="引擎"><el-select v-model="taskEditForm.engine" style="width:100%"><el-option label="ZETA" value="ZETA"></el-option><el-option label="Flink" value="FLINK"></el-option><el-option label="Spark" value="SPARK"></el-option></el-select></el-form-item>
                         <el-form-item label="部署模式"><el-select v-model="taskEditForm.deployMode" style="width:100%"><el-option label="client" value="client"></el-option><el-option label="cluster" value="cluster"></el-option></el-select></el-form-item>
+                        <el-form-item label="目标集群" v-if="taskEditForm.engine==='ZETA' || taskEditForm.deployMode==='cluster'">
+                            <el-select v-model="taskEditForm.clusterId" placeholder="选择集群节点" style="width:100%" clearable>
+                                <el-option v-for="c in clusterList" :key="c.id" :label="c.clientName+' ('+c.host+':'+c.port+')'" :value="c.id"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="目标策略">
+                            <el-select v-model="taskEditForm.targetWriteMode" @change="mode => applyTargetWriteMode(taskEditForm, mode)" style="width:100%">
+                                <el-option label="自动建表/补字段，保留已有数据" value="auto_create"></el-option>
+                                <el-option label="表存在则删除重建" value="recreate"></el-option>
+                                <el-option label="全量覆盖已有数据" value="overwrite"></el-option>
+                                <el-option label="仅追加，不处理表结构" value="append_only"></el-option>
+                            </el-select>
+                        </el-form-item>
                         <el-form-item label="增量WHERE">
                             <el-input v-model="taskEditForm.incrementalWhere" type="textarea" :rows="2" placeholder="为空则全量，例：create_time >= DATE_SUB(NOW(),INTERVAL 1 DAY)"></el-input>
                         </el-form-item>
@@ -2152,7 +3092,7 @@
                         loggedIn.value = true;
                         loginPass.value = '';
                         currentPage.value = 'dashboard';
-                        loadDs(); loadTasks();
+                        loadDs(); loadTasks(); loadDashboardStats();
                         setTimeout(() => { initChart(); loadChartData(7); }, 300);
                     } else {
                         ElMessage.error(r.data.message || '登录失败');
@@ -2250,7 +3190,7 @@
                         loginUserRole.value = sessionStorage.getItem('userRole') || '';
                         loggedIn.value = true;
                         currentPage.value = 'dashboard';
-                        loadDs(); loadTasks();
+                        loadDs(); loadTasks(); loadDashboardStats();
                         setTimeout(() => { initChart(); loadChartData(7); }, 300);
                     } else {
                         sessionStorage.removeItem('authToken');
@@ -2296,11 +3236,25 @@
             const chartHasData = ref(false);
             const activeRange = ref('7d');
             const dashTab = ref('all');
+            const emptyDashStats = () => ({ total: 0, success: 0, failed: 0, running: 0, pending: 0, none: 0 });
+            const dashboardStats = ref({ all: emptyDashStats(), batch: emptyDashStats(), realtime: emptyDashStats() });
+            const dashStats = computed(() => dashboardStats.value[dashTab.value] || emptyDashStats());
             const dashFilteredTasks = computed(() => {
                 if (dashTab.value === 'all') return taskList.value;
                 return taskList.value.filter(t => t.syncType === dashTab.value);
             });
             let execChart = null;
+
+            async function loadDashboardStats() {
+                try {
+                    const r = await api.get('/task/stats/dashboard');
+                    dashboardStats.value = {
+                        all: { ...emptyDashStats(), ...(r.data.all || {}) },
+                        batch: { ...emptyDashStats(), ...(r.data.batch || {}) },
+                        realtime: { ...emptyDashStats(), ...(r.data.realtime || {}) }
+                    };
+                } catch(e) { console.error(e); }
+            }
 
             function getDateRange(days) {
                 const end = new Date();
@@ -2420,7 +3374,7 @@
 
             watch(currentPage, (newPage) => {
                 if (newPage === 'dashboard') {
-                    setTimeout(() => { initChart(); loadChartData(7); }, 100);
+                    setTimeout(() => { initChart(); loadChartData(7); loadDashboardStats(); }, 100);
                 } else {
                     destroyChart();
                 }
@@ -2684,10 +3638,38 @@
             // ===== 创建同步任务 =====
             const createStep = ref(1);
             const taskForm = ref({ taskName: '', syncType: 'batch', engine: 'ZETA', deployMode: 'cluster', clusterId: null, sourceId: null, targetId: null, sourceDatabase: '', targetDatabase: '', description: '', incrementalWhere: '',
+                targetWriteMode: 'auto_create', schemaSaveMode: 'CREATE_SCHEMA_WHEN_NOT_EXIST', dataSaveMode: 'APPEND_DATA',
                 // 实时任务高级参数
-                rtParallelism: 2, rtStartupMode: 'initial', rtStartupTimestamp: '', rtCheckpointSec: 5,
-                rtSchemaSaveMode: 'CREATE_SCHEMA_WHEN_NOT_EXIST', rtDataSaveMode: 'APPEND_DATA'
+                rtParallelism: 2, rtStartupMode: 'initial', rtStartupTimestamp: '', rtCheckpointSec: 5
             });
+            function applyTargetWriteMode(formRef, mode) {
+                const map = {
+                    auto_create: ['CREATE_SCHEMA_WHEN_NOT_EXIST', 'APPEND_DATA'],
+                    recreate: ['RECREATE_SCHEMA', 'APPEND_DATA'],
+                    overwrite: ['CREATE_SCHEMA_WHEN_NOT_EXIST', 'DROP_DATA'],
+                    append_only: ['IGNORE', 'APPEND_DATA']
+                };
+                const picked = map[mode] || map.auto_create;
+                formRef.value.schemaSaveMode = picked[0];
+                formRef.value.dataSaveMode = picked[1];
+            }
+            function onTargetWriteModeChange(mode) {
+                applyTargetWriteMode(taskForm, mode);
+            }
+            function targetWriteModeText(mode) {
+                return {
+                    auto_create: '自动建表/补字段，保留已有数据',
+                    recreate: '表存在则删除重建',
+                    overwrite: '全量覆盖已有数据',
+                    append_only: '仅追加，不处理表结构'
+                }[mode] || '自动建表/补字段，保留已有数据';
+            }
+            function targetWriteModeFromModes(schemaMode, dataMode) {
+                if (schemaMode === 'RECREATE_SCHEMA') return 'recreate';
+                if (dataMode === 'DROP_DATA') return 'overwrite';
+                if (schemaMode === 'IGNORE') return 'append_only';
+                return 'auto_create';
+            }
             function onRtStartupChange() {
                 if (taskForm.value.rtStartupMode !== 'timestamp') taskForm.value.rtStartupTimestamp = '';
             }
@@ -2710,42 +3692,55 @@
             function onTaskSelectAll(val) { taskTableList.value.forEach(t => t._selected = val); }
             function onTaskTableSelect() { taskSelectAll.value = taskSelectedTables.value.length === taskTableList.value.length; }
             async function previewTask() {
+                onTargetWriteModeChange(taskForm.value.targetWriteMode);
                 try { const r = await api.post('/metadata/generate-batch-ddl', { sourceId: taskForm.value.sourceId, sourceDatabase: taskForm.value.sourceDatabase, tables: taskSelectedTables.value.map(t => t.tableName), targetDatabase: taskForm.value.targetDatabase }); previewDdl.value = r.data.ddl; } catch(e) { previewDdl.value = 'DDL生成失败'; }
                 const srcDs = dsList.value.find(d => d.id === taskForm.value.sourceId);
                 const tgtDs = dsList.value.find(d => d.id === taskForm.value.targetId);
                 const sourceUrl = `jdbc:mysql://${srcDs.host}:${srcDs.port}/${taskForm.value.sourceDatabase}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&tinyInt1isBit=false`;
-                const srNodeUrl = `${tgtDs.host}:8030`;
-                const srBaseUrl = `jdbc:mysql://${tgtDs.host}:${tgtDs.port}`;
+                const srHosts = String(tgtDs.host || '').split(',').map(h => h.trim()).filter(Boolean);
+                const srNodeUrls = srHosts.map(h => `"${h}:8030"`).join(', ');
+                const srBaseUrl = `jdbc:mysql://${srHosts[0] || tgtDs.host}:${tgtDs.port}`;
                 const sel = taskSelectedTables.value;
                 const isBatch = taskForm.value.syncType === 'batch';
                 const maskPwd = '********';
+                const q = v => JSON.stringify(String(v ?? ''));
+                const srJsonConfig = '    starrocks.config = {\\n      format = "JSON"\\n      strip_outer_array = true\\n    }\\n';
                 let cfg = '';
                 if (isBatch) {
-                    cfg += `env {\n  execution.parallelism = ${sel.length === 1 ? 2 : 4}\n  job.mode = "BATCH"\n}\n\nsource {\n`;
+                    cfg += `env {\n  parallelism = ${sel.length > 10 ? 1 : 2}\n  job.mode = "BATCH"\n}\n\nsource {\n`;
                     sel.forEach((t,i) => {
-                        let query = `SELECT col1, col2, ... FROM ${taskForm.value.sourceDatabase}.${t.tableName}`;
+                        let query = `SELECT col1, col2, ... FROM \`${taskForm.value.sourceDatabase}\`.\`${t.tableName}\``;
                         if (taskForm.value.incrementalWhere) {
                             query += ` WHERE ${taskForm.value.incrementalWhere}`;
                         }
-                        cfg += `  Jdbc {\n    url = "${sourceUrl}"\n    driver = "com.mysql.cj.jdbc.Driver"\n    username = "${srcDs.username}"\n    password = "${maskPwd}"\n    query = "${query}"\n  }\n`;
+                        cfg += `  Jdbc {\n    url = ${q(sourceUrl)}\n    driver = "com.mysql.cj.jdbc.Driver"\n    user = ${q(srcDs.username)}\n    password = ${q(maskPwd)}\n    int_type_narrowing = false\n    query = ${q(query)}\n  }\n`;
                     });
                     cfg += `}\n\nsink {\n`;
-                    const srBatch = "    batch_max_rows = 10240\\n    batch_max_bytes = 52428800\\n    batch_interval_ms = 10000\\n    max_retries = 5\\n    retry_backoff_multiplier_ms = 200\\n    max_retry_backoff_ms = 60000\\n    enable_upsert_delete = true\\n";
-                    sel.forEach((t,i) => { cfg += `  StarRocks {\n    base-url = "${srBaseUrl}"\n    nodeUrls = ["${srNodeUrl}"]\n    username = "${tgtDs.username}"\n    password = "${maskPwd}"\n    database = "${taskForm.value.targetDatabase}"\n    table = "${t._targetTable}"\n${srBatch}  }\n`; });
+                    const srBatch = "    batch_max_rows = 10240\\n    batch_max_bytes = 52428800\\n    max_retries = 5\\n    retry_backoff_multiplier_ms = 200\\n    max_retry_backoff_ms = 60000\\n    enable_upsert_delete = true\\n    schema_save_mode = " + taskForm.value.schemaSaveMode + "\\n    data_save_mode = " + taskForm.value.dataSaveMode + "\\n" + srJsonConfig;
+                    sel.forEach((t,i) => { cfg += `  StarRocks {\n    base-url = ${q(srBaseUrl)}\n    nodeUrls = [${srNodeUrls}]\n    username = ${q(tgtDs.username)}\n    password = ${q(maskPwd)}\n    database = ${q(taskForm.value.targetDatabase)}\n    table = ${q(t._targetTable)}\n${srBatch}  }\n`; });
                     cfg += `}\n`;
                 } else {
                     const f = taskForm.value;
                     const cpMs = (f.rtCheckpointSec||10) * 1000;
-                    const srBatch2 = "    batch_max_rows = 10240\\n    batch_max_bytes = 52428800\\n    batch_interval_ms = 10000\\n    max_retries = 5\\n    retry_backoff_multiplier_ms = 200\\n    max_retry_backoff_ms = 60000\\n    enable_upsert_delete = true\\n    schema_save_mode = " + (f.rtSchemaSaveMode||'CREATE_SCHEMA_WHEN_NOT_EXIST') + "\\n    data_save_mode = " + (f.rtDataSaveMode||'APPEND_DATA') + "\\n";
-                    cfg += `env {\n  execution.parallelism = ${f.rtParallelism||2}\n  job.mode = "STREAMING"\n  checkpoint.interval = ${cpMs}\n}\n\nsource {\n`;
+                    const srBatch2 = "    batch_max_rows = 10240\\n    batch_max_bytes = 52428800\\n    max_retries = 5\\n    retry_backoff_multiplier_ms = 200\\n    max_retry_backoff_ms = 60000\\n    enable_upsert_delete = true\\n    schema_save_mode = " + taskForm.value.schemaSaveMode + "\\n    data_save_mode = " + taskForm.value.dataSaveMode + "\\n" + srJsonConfig;
+                    const renameRealtimeTables = sel.some(t => (t._targetTable || t.tableName) !== t.tableName);
+                    cfg += `env {\n  parallelism = ${f.rtParallelism||2}\n  job.mode = "STREAMING"\n  checkpoint.interval = ${cpMs}\n}\n\nsource {\n`;
                     let startupCfg = `    startup.mode = "${f.rtStartupMode||'initial'}"\n`;
                     if (f.rtStartupMode === 'timestamp' && f.rtStartupTimestamp) {
                         startupCfg = `    startup.mode = "timestamp"\n    startup.timestamp = "${f.rtStartupTimestamp}"\n`;
                     }
                     let tl = sel.map(t => `"${taskForm.value.sourceDatabase}.${t.tableName}"`).join(', ');
-                    cfg += `  MySQL-CDC {\n${startupCfg}    server-id = "5656-5660"\n    username = "${srcDs.username}"\n    password = "${maskPwd}"\n    base-url = "${sourceUrl}"\n    table-names = [${tl}]\n    snapshot.split.size = 16000\n    snapshot.fetch.size = 5000\n  }\n`;
-                    cfg += `}\n\nsink {\n`;
-                    cfg += `  StarRocks {\n    base-url = "${srBaseUrl}"\n    nodeUrls = ["${srNodeUrl}"]\n    username = "${tgtDs.username}"\n    password = "${maskPwd}"\n    database = "${taskForm.value.targetDatabase}"\n    table = "\${table_name}"\n${srBatch2}  }\n`;
+                    const sourceOutput = renameRealtimeTables ? '    plugin_output = "mysql_cdc_source"\\n' : '';
+                    cfg += `  MySQL-CDC {\n${sourceOutput}${startupCfg}    server-id = "5656-5660"\n    username = ${q(srcDs.username)}\n    password = ${q(maskPwd)}\n    base-url = ${q(sourceUrl)}\n    table-names = [${tl}]\n    snapshot.split.size = 16000\n    snapshot.fetch.size = 5000\n  }\n`;
+                    cfg += `}\n\n`;
+                    let sinkInput = '';
+                    if (renameRealtimeTables) {
+                        const rules = sel.map(t => `      {\n        replace_from = ${q('^\\\\Q' + t.tableName + '\\\\E$')}\n        replace_to = ${q(t._targetTable || t.tableName)}\n      }`).join(',\n');
+                        cfg += `transform {\n  TableRename {\n    plugin_input = "mysql_cdc_source"\n    plugin_output = "renamed_cdc_tables"\n    replacements_with_regex = [\n${rules}\n    ]\n  }\n}\n\n`;
+                        sinkInput = '    plugin_input = "renamed_cdc_tables"\\n';
+                    }
+                    cfg += `sink {\n`;
+                    cfg += `  StarRocks {\n${sinkInput}    base-url = ${q(srBaseUrl)}\n    nodeUrls = [${srNodeUrls}]\n    username = ${q(tgtDs.username)}\n    password = ${q(maskPwd)}\n    database = ${q(taskForm.value.targetDatabase)}\n    table = "\${table_name}"\n${srBatch2}  }\n`;
                     cfg += `}\n`;
                 }
                 previewConfig.value = cfg;
@@ -2759,10 +3754,10 @@
                         syncType: taskForm.value.syncType, engine: taskForm.value.engine, deployMode: taskForm.value.deployMode,
                         clusterId: taskForm.value.clusterId, description: taskForm.value.description,
                         incrementalWhere: taskForm.value.incrementalWhere || '',
+                        schemaSaveMode: taskForm.value.schemaSaveMode, dataSaveMode: taskForm.value.dataSaveMode,
                         rtParallelism: taskForm.value.rtParallelism,
                         rtStartupMode: taskForm.value.rtStartupMode, rtStartupTimestamp: taskForm.value.rtStartupTimestamp,
                         rtCheckpointSec: taskForm.value.rtCheckpointSec,
-                        rtSchemaSaveMode: taskForm.value.rtSchemaSaveMode, rtDataSaveMode: taskForm.value.rtDataSaveMode,
                         tables: taskSelectedTables.value.map(t => ({ sourceDatabase: taskForm.value.sourceDatabase, sourceTable: t.tableName, targetDatabase: taskForm.value.targetDatabase, targetTable: t._targetTable || t.tableName, partitionColumn: t._partitionCol || '', syncType: taskForm.value.syncType }))
                     });
                     ElMessage.success('同步任务创建成功');
@@ -2770,8 +3765,8 @@
                     await loadTasks();
                     createStep.value = 1;
                     taskForm.value = { taskName: '', syncType: 'batch', engine: 'ZETA', deployMode: 'cluster', clusterId: null, sourceId: null, targetId: null, sourceDatabase: '', targetDatabase: '', description: '', incrementalWhere: '',
-                        rtParallelism: 2, rtStartupMode: 'initial', rtStartupTimestamp: '', rtCheckpointSec: 5,
-                        rtSchemaSaveMode: 'CREATE_SCHEMA_WHEN_NOT_EXIST', rtDataSaveMode: 'APPEND_DATA'
+                        targetWriteMode: 'auto_create', schemaSaveMode: 'CREATE_SCHEMA_WHEN_NOT_EXIST', dataSaveMode: 'APPEND_DATA',
+                        rtParallelism: 2, rtStartupMode: 'initial', rtStartupTimestamp: '', rtCheckpointSec: 5
                     };
                     taskDatabases.value = []; taskTargetDatabases.value = [];
                     taskTableList.value = []; taskSelectAll.value = false; taskTableSearch.value = '';
@@ -2810,7 +3805,12 @@
                 if (taskSearchStatus.value === 'scheduled') list = list.filter(t => t.scheduleEnabled);
                 if (taskSearchStatus.value === 'success') list = list.filter(t => t.lastExecStatus === 'SUCCESS');
                 if (taskSearchStatus.value === 'failed') list = list.filter(t => t.lastExecStatus === 'FAILED');
-                return list;
+                return [...list].sort((a, b) => {
+                    const at = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+                    const bt = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                    if (bt !== at) return bt - at;
+                    return (b.id || 0) - (a.id || 0);
+                });
             });
             function doSearchTasks() {}
             function resetTaskSearch() {
@@ -2825,11 +3825,39 @@
                     if (_lastTaskTab && _lastTaskTab !== newPage) resetTaskSearch();
                     _lastTaskTab = newPage;
                     ensureTaskAutoRefresh();
+                } else if (newPage === 'synced-tables') {
+                    _lastTaskTab = null;
+                    stopTaskAutoRefresh();
+                    loadSyncedTables();
                 } else {
                     _lastTaskTab = null;
                     stopTaskAutoRefresh();
                 }
             });
+
+            const syncedTables = ref([]);
+            const syncedTableKeyword = ref('');
+            const filteredSyncedTables = computed(() => {
+                const kw = syncedTableKeyword.value.trim().toLowerCase();
+                let list = syncedTables.value;
+                if (kw) {
+                    list = list.filter(r => [r.taskName, r.sourceDatabase, r.sourceTable, r.targetDatabase, r.targetTable]
+                        .some(v => String(v || '').toLowerCase().includes(kw)));
+                }
+                return [...list].sort((a, b) => {
+                    const nameCompare = String(a.taskName || '').localeCompare(String(b.taskName || ''));
+                    if (nameCompare !== 0) return nameCompare;
+                    const sourceCompare = String(a.sourceDatabase || '').localeCompare(String(b.sourceDatabase || ''));
+                    if (sourceCompare !== 0) return sourceCompare;
+                    return String(a.sourceTable || '').localeCompare(String(b.sourceTable || ''));
+                });
+            });
+            async function loadSyncedTables() {
+                try {
+                    const r = await api.get('/task/tables/synced');
+                    syncedTables.value = r.data || [];
+                } catch(e) { console.error(e); }
+            }
             function formatNumber(n) {
                 if (n == null) return '-';
                 if (n >= 10000) return (n/10000).toFixed(1) + '万';
@@ -2915,14 +3943,20 @@
 
             const taskDetailVisible = ref(false), taskDetail = ref({}), taskDetailTables = ref([]), taskDetailTab = ref('tables');
             const ddlDialogVisible = ref(false), ddlDialogContent = ref('');
-            const syncingDdl = ref(false), syncDdlDrop = ref(false), syncDdlResult = ref(''), syncDdlOk = ref(false);
             const executionList = ref([]);
+            const executingTaskIds = ref(new Set());
             const execLogDialogVisible = ref(false);
             const viewingExec = ref(null);
             const execLogContent = ref('');
             const rawLogText = ref('');
 
-            async function loadTasks() { try { const r = await api.get('/task/list'); taskList.value = r.data; } catch(e) { console.error(e); } }
+            async function loadTasks() {
+                try {
+                    const r = await api.get('/task/list');
+                    taskList.value = r.data;
+                    if (currentPage.value === 'dashboard') await loadDashboardStats();
+                } catch(e) { console.error(e); }
+            }
 
             // 有运行中任务时每5秒自动刷新
             let _taskAutoTimer = null;
@@ -2931,7 +3965,10 @@
                 _taskAutoTimer = setInterval(() => {
                     const hasRunning = taskList.value.some(t => t.status === 'RUNNING' || t.lastExecStatus === 'RUNNING');
                     if (!hasRunning) { stopTaskAutoRefresh(); return; }
-                    api.get('/task/list').then(r => { taskList.value = r.data; }).catch(() => {});
+                    api.get('/task/list').then(r => {
+                        taskList.value = r.data;
+                        if (currentPage.value === 'dashboard') loadDashboardStats();
+                    }).catch(() => {});
                 }, 5000);
             }
             function stopTaskAutoRefresh() { if (_taskAutoTimer) { clearInterval(_taskAutoTimer); _taskAutoTimer = null; } }
@@ -2945,29 +3982,6 @@
                 } catch(e) { console.error(e); }
             }
             function viewTableDdl(tt) { ddlDialogContent.value = tt.srDdl || '无DDL'; ddlDialogVisible.value = true; }
-
-            const syncDdlResults = ref([]);
-
-            async function syncDdl() {
-                if (!taskDetail.value.id) return;
-                syncingDdl.value = true; syncDdlResult.value = ''; syncDdlOk.value = false; syncDdlResults.value = [];
-                try {
-                    const r = await api.post('/task/' + taskDetail.value.id + '/sync-ddl', { dropIfExists: syncDdlDrop.value });
-                    syncDdlResults.value = r.data;
-                    const allOk = r.data.every(x => x.success);
-                    const failCount = r.data.filter(x => !x.success).length;
-                    if (allOk) {
-                        syncDdlResult.value = '全部建表成功';
-                        syncDdlOk.value = true;
-                    } else {
-                        syncDdlResult.value = '成功 ' + (r.data.length - failCount) + ' 张，失败 ' + failCount + ' 张';
-                        syncDdlOk.value = false;
-                    }
-                } catch(e) {
-                    syncDdlResult.value = '执行失败: ' + (e.response?.data?.message || e.message);
-                    syncDdlOk.value = false;
-                } finally { syncingDdl.value = false; }
-            }
 
             async function viewExecutionLog(exec) {
                 try {
@@ -3011,10 +4025,22 @@
             async function executeTask(task) {
                 try {
                     await ElMessageBox.confirm(`确认执行任务【${task.taskName}】？`, '执行确认', { type: 'warning', confirmButtonText: '确认执行', cancelButtonText: '取消' });
+                    executingTaskIds.value = new Set([...executingTaskIds.value, task.id]);
                     await api.post('/task/' + task.id + '/execute');
                     ElMessage.success('任务已触发执行');
+                    await loadTasks();
+                    ensureTaskAutoRefresh();
                     setTimeout(async () => { await loadTasks(); if (taskDetailVisible.value && taskDetail.value.id === task.id) await viewTaskDetail(task); }, 2000);
-                } catch(e) { if (e !== 'cancel') console.error(e); }
+                } catch(e) {
+                    if (e !== 'cancel') {
+                        console.error(e);
+                        ElMessage.error(e?.response?.data?.message || e?.message || '任务触发失败');
+                    }
+                } finally {
+                    const next = new Set(executingTaskIds.value);
+                    next.delete(task.id);
+                    executingTaskIds.value = next;
+                }
             }
             async function stopTask(task) {
                 try {
@@ -3274,19 +4300,30 @@
 
             // ===== 编辑任务 =====
             const taskEditVisible = ref(false);
-            const taskEditForm = ref({ id: null, taskName: '', engine: 'ZETA', deployMode: 'client', description: '', seatunnelConfig: '', incrementalWhere: '' });
+            const taskEditForm = ref({ id: null, taskName: '', engine: 'ZETA', deployMode: 'client', clusterId: null, targetWriteMode: 'auto_create', schemaSaveMode: 'CREATE_SCHEMA_WHEN_NOT_EXIST', dataSaveMode: 'APPEND_DATA', description: '', seatunnelConfig: '', incrementalWhere: '' });
 
-            function openTaskEdit(task) {
-                taskEditForm.value = {
-                    id: task.id, taskName: task.taskName, engine: task.engine || 'ZETA',
-                    deployMode: task.deployMode || 'client', description: task.description || '',
-                    seatunnelConfig: task.seatunnelConfig || '',
-                    incrementalWhere: task.incrementalWhere || ''
-                };
-                taskEditVisible.value = true;
+            async function openTaskEdit(task) {
+                try {
+                    await loadClusterListSilent();
+                    const r = await api.get('/task/' + task.id);
+                    const detail = r.data || task;
+                    const schemaMode = detail.schemaSaveMode || 'CREATE_SCHEMA_WHEN_NOT_EXIST';
+                    const dataMode = detail.dataSaveMode || 'APPEND_DATA';
+                    taskEditForm.value = {
+                        id: detail.id, taskName: detail.taskName, engine: detail.engine || 'ZETA',
+                        deployMode: detail.deployMode || 'client', clusterId: detail.clusterId || null,
+                        targetWriteMode: targetWriteModeFromModes(schemaMode, dataMode),
+                        schemaSaveMode: schemaMode, dataSaveMode: dataMode,
+                        description: detail.description || '',
+                        seatunnelConfig: detail.seatunnelConfig || '',
+                        incrementalWhere: detail.incrementalWhere || ''
+                    };
+                    taskEditVisible.value = true;
+                } catch(e) { console.error(e); }
             }
             async function saveTaskEdit() {
                 try {
+                    applyTargetWriteMode(taskEditForm, taskEditForm.value.targetWriteMode);
                     await api.put('/task/update', taskEditForm.value);
                     ElMessage.success('保存成功'); taskEditVisible.value = false; await loadTasks();
                 } catch(e) { console.error(e); }
@@ -3592,7 +4629,7 @@
                 currentPage, statusMap, copyText,
                 execStatusClass, execStatusText, formatTime, calcDuration,
                 todayStats, activeRange, chartHasData, switchRange,
-                dashTab, dashFilteredTasks,
+                dashTab, dashFilteredTasks, dashboardStats, dashStats,
                 dsList, dsFilter, dsDialogVisible, dsForm, filteredDs, mysqlDsList, srDsList,
                 openDsDialog, saveDs, deleteDs, testDs, getDsName,
                 metaDsId, metaDsType, metaDatabase, metaDatabases, metaTables, metaSelectedTable, metaColumns, metaPreviewColumns, metaPreviewRows,
@@ -3602,14 +4639,14 @@
                 editRowVisible, editRowMode, editRowValues, editRowSubmitting,
                 openAddRowDialog, openEditRowDialog, submitEditRow, confirmDeleteRow, copyCell,
                 createStep, taskForm, taskDatabases, taskTargetDatabases, taskTableList, taskSelectedTables, taskSelectAll, taskSelectIndeterminate,
-                taskTableSearch, filteredTaskTables, onTaskSourceChange, onTaskTargetChange, onTaskDbChange, onTaskSelectAll, onTaskTableSelect, onRtStartupChange,
+                taskTableSearch, filteredTaskTables, onTaskSourceChange, onTaskTargetChange, onTaskDbChange, onTaskSelectAll, onTaskTableSelect, onRtStartupChange, onTargetWriteModeChange, applyTargetWriteMode, targetWriteModeText,
                 previewTask, previewDdl, previewConfig, submitting, submitTask,
                 taskList, taskSearchName, taskSearchDate, taskSearchStatus, filteredTaskList, doSearchTasks, resetTaskSearch,
+                syncedTables, syncedTableKeyword, filteredSyncedTables, loadSyncedTables,
                 formatNumber, taskDuration, getNextRun, handleTaskCommand,
                 taskDetailVisible, taskDetail, taskDetailTables, taskDetailTab,
                 ddlDialogVisible, ddlDialogContent, viewTaskDetail, viewTableDdl,
-                syncingDdl, syncDdlDrop, syncDdlResult, syncDdlResults, syncDdlOk, syncDdl,
-                executionList, execLogDialogVisible, viewingExec, execLogContent, viewExecutionLog, refreshExecutionLog, copyLogText,
+                executionList, executingTaskIds, execLogDialogVisible, viewingExec, execLogContent, viewExecutionLog, refreshExecutionLog, copyLogText,
                 taskEditVisible, taskEditForm, openTaskEdit, saveTaskEdit,
                 cronDialogVisible, cronTaskId, cronTaskName, cronMainTab, cronTab,
                 cronExpression, cronNextRuns, cron, cronQuick, cronReadonly, weekOptions,
