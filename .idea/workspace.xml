@@ -6,16 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="9af31f2a-414c-40b2-adbf-6c6151bfa09a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/datasync/DataSyncApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/datasync/DataSyncApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/datasync/controller/TaskController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/datasync/controller/TaskController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/datasync/entity/SyncTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/datasync/entity/SyncTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/datasync/repository/SyncTaskRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/datasync/repository/SyncTaskRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/datasync/repository/SyncTaskTableRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/datasync/repository/SyncTaskTableRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/datasync/service/SchedulerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/datasync/service/SchedulerService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/datasync/service/SyncTaskService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/datasync/service/SyncTaskService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/schema.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/datasync/controller/TaskController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/datasync/controller/TaskController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/datasync/service/SyncTaskService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/datasync/service/SyncTaskService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/datasync-server-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/datasync-server-1.0.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/datasync-server-1.0.0.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/datasync-server-1.0.0.jar.original" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,33 +45,47 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Maven.datasync-server [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.datasync-server [package].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;Spring Boot.DataSyncApplication.executor&quot;: &quot;Run&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/ldeaProjects44/datasync-server&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.DataSyncApplication.executor": "Run",
+    "Maven.datasync-server [clean].executor": "Run",
+    "Maven.datasync-server [package].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.DataSyncApplication.executor": "Run",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/ldeaProjects44/datasync-server",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "MavenSettings",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager">
+}]]></component>
+  <component name="RunManager" selected="Application.DataSyncApplication">
+    <configuration name="DataSyncApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.datasync.DataSyncApplication" />
+      <module name="datasync-server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.datasync.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="DataSyncApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="datasync-server" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.datasync.DataSyncApplication" />
@@ -81,6 +93,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.DataSyncApplication" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -99,6 +116,8 @@
       <workItem from="1782979345506" duration="2649000" />
       <workItem from="1782982760727" duration="3578000" />
       <workItem from="1783043215216" duration="11174000" />
+      <workItem from="1783061476665" duration="15000" />
+      <workItem from="1785992274763" duration="4084000" />
     </task>
     <servers />
   </component>

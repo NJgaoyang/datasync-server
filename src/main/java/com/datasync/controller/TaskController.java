@@ -95,6 +95,12 @@ public class TaskController {
         return taskService.syncDdl(id, dropIfExists);
     }
 
+    /** 删除任务中的一张表，并重新生成 SeaTunnel 配置 */
+    @DeleteMapping("/{id}/tables/{tableId}")
+    public SyncTask deleteTaskTable(@PathVariable Long id, @PathVariable Long tableId) {
+        return taskService.deleteTaskTable(id, tableId);
+    }
+
     /** 手动执行一次 */
     @PostMapping("/{id}/execute")
     public void execute(@PathVariable Long id) {

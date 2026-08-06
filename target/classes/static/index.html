@@ -2460,16 +2460,25 @@
 
                     <el-tabs v-model="taskDetailTab">
                         <el-tab-pane label="表映射" name="tables">
-                            <table class="task-table" v-if="taskDetailTables.length">
-                                <thead><tr><th>源库.源表</th><th>目标库.目标表</th><th>类型</th><th>DDL</th></tr></thead>
-                                <tbody><tr v-for="tt in taskDetailTables" :key="tt.id">
+                            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                                <el-input v-model="taskDetailTableSearch" placeholder="搜索源库/源表/目标表..." size="small" clearable style="width:280px">
+                                    <template #prefix><i class="fas fa-search"></i></template>
+                                </el-input>
+                                <span style="font-size:12px;color:var(--text-muted)">{{ filteredTaskDetailTables.length }} / {{ taskDetailTables.length }} 张表</span>
+                                <span v-if="taskDetail.enabled" style="font-size:12px;color:#f59e0b">任务在线，需下线后才能删除表</span>
+                                <el-button size="small" style="margin-left:auto" @click="refreshTaskDetail"><i class="fas fa-sync-alt"></i> 刷新</el-button>
+                            </div>
+                            <table class="task-table" v-if="filteredTaskDetailTables.length">
+                                <thead><tr><th>源库.源表</th><th>目标库.目标表</th><th>类型</th><th>DDL</th><th v-if="!taskDetail.enabled">操作</th></tr></thead>
+                                <tbody><tr v-for="tt in filteredTaskDetailTables" :key="tt.id">
                                     <td style="font-family:'JetBrains Mono',monospace;font-size:12.5px">{{ tt.sourceDatabase }}.<b>{{ tt.sourceTable }}</b></td>
                                     <td style="font-family:'JetBrains Mono',monospace;font-size:12.5px">{{ tt.targetDatabase }}.<b>{{ tt.targetTable }}</b></td>
                                     <td><span class="sync-type-tag" :class="tt.syncType || 'batch'">{{ tt.syncType==='realtime'?'实时':'批量' }}</span></td>
                                     <td><el-button size="mini" @click="viewTableDdl(tt)">查看DDL</el-button></td>
+                                    <td v-if="!taskDetail.enabled"><el-button size="mini" type="danger" plain @click="deleteTaskTable(tt)">删除</el-button></td>
                                 </tr></tbody>
                             </table>
-                            <div class="empty-state" v-else style="padding:30px"><p style="font-size:13px">无表映射数据</p></div>
+                            <div class="empty-state" v-else style="padding:30px"><p style="font-size:13px">{{ taskDetailTableSearch ? '没有匹配的表' : '无表映射数据' }}</p></div>
                         </el-tab-pane>
                         <el-tab-pane label="SeaTunnel配置" name="config">
                             <div class="code-block" style="max-height:420px">{{ taskDetail.seatunnelConfig || '未生成' }}</div>
@@ -3942,6 +3951,45 @@
             }
 
             const taskDetailVisible = ref(false), taskDetail = ref({}), taskDetailTables = ref([]), taskDetailTab = ref('tables');
+            const taskDetailTableSearch = ref('');
+            const filteredTaskDetailTables = computed(() => {
+                const kw = taskDetailTableSearch.value.trim().toLowerCase();
+                if (!kw) return taskDetailTables.value;
+                return taskDetailTables.value.filter(tt =>
+                    String(tt.sourceDatabase || '').toLowerCase().includes(kw) ||
+                    String(tt.sourceTable || '').toLowerCase().includes(kw) ||
+                    String(tt.targetDatabase || '').toLowerCase().includes(kw) ||
+                    String(tt.targetTable || '').toLowerCase().includes(kw)
+                );
+            });
+
+            async function deleteTaskTable(tt) {
+                try {
+                    await ElMessageBox.confirm(
+                        `确认从任务中删除表【${tt.sourceDatabase}.${tt.sourceTable}】？\n删除后该表不再参与同步（不会删除目标库中的表和数据）。`,
+                        '删除表', { confirmButtonText: '确认删除', cancelButtonText: '取消', type: 'warning' });
+                    await api.delete('/task/' + taskDetail.value.id + '/tables/' + tt.id);
+                    ElMessage.success('已删除，同步配置已重新生成');
+                    await refreshTaskDetail();
+                } catch(e) { if (e !== 'cancel') console.error(e); }
+            }
+            // 刷新任务详情（任务信息 + 表映射 + 执行历史），各请求独立容错
+            async function refreshTaskDetail() {
+                const id = taskDetail.value?.id;
+                if (!id) return;
+                try {
+                    const r = await api.get('/task/' + id);
+                    taskDetail.value = r.data;
+                    const r2 = await api.get('/task/' + id + '/tables');
+                    taskDetailTables.value = r2.data;
+                } catch(e) { console.error(e); }
+                try {
+                    const r3 = await api.get('/task/' + id + '/executions', { params: { limit: 3 } });
+                    executionList.value = r3.data;
+                } catch(e) { console.error(e); }
+                ElMessage.success('已刷新');
+            }
+
             const ddlDialogVisible = ref(false), ddlDialogContent = ref('');
             const executionList = ref([]);
             const executingTaskIds = ref(new Set());
@@ -4644,7 +4692,7 @@
                 taskList, taskSearchName, taskSearchDate, taskSearchStatus, filteredTaskList, doSearchTasks, resetTaskSearch,
                 syncedTables, syncedTableKeyword, filteredSyncedTables, loadSyncedTables,
                 formatNumber, taskDuration, getNextRun, handleTaskCommand,
-                taskDetailVisible, taskDetail, taskDetailTables, taskDetailTab,
+                taskDetailVisible, taskDetail, taskDetailTables, taskDetailTab, taskDetailTableSearch, filteredTaskDetailTables, deleteTaskTable, refreshTaskDetail,
                 ddlDialogVisible, ddlDialogContent, viewTaskDetail, viewTableDdl,
                 executionList, executingTaskIds, execLogDialogVisible, viewingExec, execLogContent, viewExecutionLog, refreshExecutionLog, copyLogText,
                 taskEditVisible, taskEditForm, openTaskEdit, saveTaskEdit,

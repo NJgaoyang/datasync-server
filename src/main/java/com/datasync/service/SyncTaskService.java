@@ -487,7 +487,42 @@ public class SyncTaskService {
         taskRepository.save(task);
     }
 
+    /**
+     * 删除任务中的一张表，并重新生成 SeaTunnel 配置（剔除已删除的表）
+     */
+    @Transactional
+    public SyncTask deleteTaskTable(Long taskId, Long tableId) {
+        SyncTask task = taskRepository.findById(taskId).orElseThrow(() -> new RuntimeException("任务不存在"));
+        if (Boolean.TRUE.equals(task.getEnabled())) {
+            throw new RuntimeException("任务在线，请先下线后再删除表");
+        }
+        if ("RUNNING".equals(task.getStatus())) {
+            throw new RuntimeException("任务运行中，无法删除表");
+        }
+        SyncTaskTable table = tableRepository.findById(tableId).orElseThrow(() -> new RuntimeException("表不存在"));
+        if (!Objects.equals(table.getTaskId(), taskId)) {
+            throw new RuntimeException("表不属于该任务");
+        }
+        tableRepository.delete(table);
+
+        // 删除后重新生成配置，跳过目标库结构准备（避免误触发建表/删表）
+        List<SyncTaskTable> remaining = tableRepository.findByTaskIdOrderByIdAsc(taskId);
+        if (remaining.isEmpty()) {
+            task.setSeatunnelConfig("");
+        } else {
+            task.setSeatunnelConfig(buildSeaTunnelConfigForTables(task, remaining, true));
+        }
+        return taskRepository.save(task);
+    }
+
     public String buildSeaTunnelConfigForTables(SyncTask task, List<SyncTaskTable> tables) {
+        return buildSeaTunnelConfigForTables(task, tables, false);
+    }
+
+    /**
+     * 生成 SeaTunnel 配置；skipSchemaPrepare=true 时跳过目标库表结构准备（用于删除表等纯配置管理操作，避免误触发建表/删表）
+     */
+    private String buildSeaTunnelConfigForTables(SyncTask task, List<SyncTaskTable> tables, boolean skipSchemaPrepare) {
         if (task == null) throw new RuntimeException("浠诲姟涓嶅瓨鍦?");
         if (tables == null || tables.isEmpty()) throw new RuntimeException("浠诲姟娌℃湁鍏宠仈琛?");
 
@@ -500,7 +535,7 @@ public class SyncTaskService {
             rtConfig.put("rtDataSaveMode", task.getDataSaveMode());
         }
 
-        return buildSeaTunnelConfig(task, toSeaTunnelTableMaps(tables), null, rtConfig);
+        return buildSeaTunnelConfig(task, toSeaTunnelTableMaps(tables), null, rtConfig, skipSchemaPrepare);
     }
 
     private List<Map<String, Object>> toSeaTunnelTableMaps(List<SyncTaskTable> tables) {
@@ -732,6 +767,10 @@ public class SyncTaskService {
     }
 
     private String buildSeaTunnelConfig(SyncTask task, List<Map<String, Object>> tables, Map<String, String> colListCache, Map<String, Object> rtConfig) {
+        return buildSeaTunnelConfig(task, tables, colListCache, rtConfig, false);
+    }
+
+    private String buildSeaTunnelConfig(SyncTask task, List<Map<String, Object>> tables, Map<String, String> colListCache, Map<String, Object> rtConfig, boolean skipSchemaPrepare) {
         Datasource sourceDs = datasourceService.getById(task.getSourceId());
         Datasource targetDs = datasourceService.getById(task.getTargetId());
         String sourceUrl = String.format("jdbc:mysql://%s:%d/%s?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&tinyInt1isBit=false",
@@ -762,7 +801,7 @@ public class SyncTaskService {
 
         String schemaSaveMode = normalizeSchemaSaveMode(task.getSchemaSaveMode());
         String dataSaveMode = normalizeDataSaveMode(task.getDataSaveMode());
-        if (shouldPrepareSchemaBeforeSync(schemaSaveMode)) {
+        if (!skipSchemaPrepare && shouldPrepareSchemaBeforeSync(schemaSaveMode)) {
             prepareTargetSchemas(task, tables, schemaSaveMode);
         }
         String seatunnelSchemaSaveMode = shouldPrepareSchemaBeforeSync(schemaSaveMode) ? "IGNORE" : schemaSaveMode;
@@ -943,15 +982,22 @@ public class SyncTaskService {
     private String buildCompatibleColumnList(Long sourceId, String sourceDatabase, String sourceTable,
                                              Datasource targetDs, String targetDatabase, String targetTable) {
         List<String> sourceColumns = getColumnNames(sourceId, sourceDatabase, sourceTable);
+        if (sourceColumns.isEmpty()) return "*";
         List<String> targetColumns = getColumnNamesIfTableExists(targetDs, targetDatabase, targetTable);
-        if (targetColumns == null || targetColumns.isEmpty()) {
-            return sourceColumns.stream()
-                    .map(this::quoteIdentifier)
-                    .collect(Collectors.joining(", "));
+        if (targetColumns != null && !targetColumns.isEmpty()) {
+            // 目标表已存在时校验字段完整性：缺失则明确报错，避免 SELECT 交集静默丢字段
+            // （默认 CREATE_SCHEMA_WHEN_NOT_EXIST/RECREATE_SCHEMA 模式下 prepareTargetSchemas 已先补齐，此处不会触发）
+            List<String> missing = sourceColumns.stream()
+                    .filter(c -> !targetColumns.contains(c))
+                    .collect(Collectors.toList());
+            if (!missing.isEmpty()) {
+                throw new RuntimeException("目标表 " + targetDatabase + "." + targetTable
+                        + " 缺少源表字段: " + String.join(", ", missing)
+                        + "。请先执行「同步表结构(DDL)」，或使用 schema_save_mode = CREATE_SCHEMA_WHEN_NOT_EXIST / RECREATE_SCHEMA 让系统自动补齐字段");
+            }
         }
-
-        return targetColumns.stream()
-                .filter(sourceColumns::contains)
+        // 始终选择源表全部字段，保证字段完整同步
+        return sourceColumns.stream()
                 .map(this::quoteIdentifier)
                 .collect(Collectors.joining(", "));
     }
